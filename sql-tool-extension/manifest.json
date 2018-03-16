@@ -5,7 +5,7 @@
 	"version": "0.1",
 	"content_scripts": [
 		{
-			"matches": ["http://*/QuerySqlTool01/querySqlTool/goToIndex.action"],
+			"matches": ["http://*/*/querySqlTool/goToIndex.action"],
 			"js": ["jquery-1.12.4.min.js", "sql-tool-extension.js"]
 		}
 	]

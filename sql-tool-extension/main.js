@@ -1,6 +1,4 @@
-
 (function() {
-
     var $frame = $("#frame");
 
     var ui = (function() {
@@ -140,4 +138,4 @@
 
     // Result info
     $("#excuteTime").after("<div id='resultInfo' style='display: inline-block; padding-left: 10px;'></div>");
-})();
+})(this);

@@ -1,6 +1,12 @@
 (function() {
     var $frame = $("#frame");
 
+    var sqlEditor = CodeMirror.fromTextArea('sql', {
+        path: extensionBaseUrl + "codemirror-sql/",
+        parserfile: "parsesql.js",
+        stylesheet: extensionBaseUrl + "codemirror-sql/sqlcolors.css"
+    });
+
     var ui = (function() {
         var intervalControl = null;
         var data = {
@@ -79,7 +85,8 @@
 
     // Override the outer function
     this.search = function(type) {
-        var sqlStr = $("#sql").val();
+        //var sqlStr = $("#sql").val();
+        var sqlStr = sqlEditor.getCode();
         if($.trim(sqlStr) == ""){
             alert("Please enter the SQL script!");
             return;
@@ -111,12 +118,14 @@
     }
 
     // F5: execute SQL command
-    $(document).bind("keydown", function(e) {
+    var f5Handler = function(e) {
         if ((e.which || e.keyCode) == 116) {
             e.preventDefault();
             search('readOnly');
         }
-    });
+    };
+    $(document).bind("keydown", f5Handler);
+    $(sqlEditor.frame.contentWindow.document).bind("keydown", f5Handler);
 
     // Load more data (next page) when scroll near bottom of page
     $(window).scroll(function() {
@@ -128,13 +137,6 @@
         }
         loadMore();
     });
-
-    // Change style
-    $("#sql").css({
-        fontSize: '16pt',
-        fontFamily: 'Courier New',
-        fontWeight: 'bold'
-    })
 
     // Result info
     $("#excuteTime").after("<div id='resultInfo' style='display: inline-block; padding-left: 10px;'></div>");

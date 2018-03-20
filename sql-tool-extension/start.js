@@ -8,6 +8,7 @@
     // Inject scripts
     var loaded = [];
     var scripts = [
+        "lib/jquery.min.js",
         "codemirror-sql/codemirror.js",
         "codemirror-sql/mirrorframe.js"
     ];

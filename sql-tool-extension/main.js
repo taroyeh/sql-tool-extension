@@ -1,4 +1,5 @@
 (function() {
+	var itemsPerPage = 50;
     var $frame = $("#frame");
 
     var sqlEditor = CodeMirror.fromTextArea('sql', {
@@ -25,12 +26,12 @@
             updateData: function(rowCount, pageNumber) {
                 data.rowCount = rowCount;
                 data.pageNumber = pageNumber;
-                if (pageNumber * 50 >= rowCount) {
+                if (pageNumber * itemsPerPage >= rowCount) {
                     data.done = true;
                 }
                 $("#resultInfo").html(
                     "<span><b>Count: </b> " + rowCount + " </span> " + 
-                    "<span><b>Page loaded: </b> " + pageNumber + " / " + Math.ceil(rowCount / 50) + " </span>"
+                    "<span><b>Page loaded: </b> " + pageNumber + " / " + Math.ceil(rowCount / itemsPerPage) + " </span>"
                 );
             },
             canLoadMore: function() {
@@ -67,11 +68,24 @@
             dataType: "html",
             success: function(response) {
                 var $response = $(response);
-                ui.updateData(
-                    parseInt($($response.filter("#rowCount").val()).text()), // rowCount
-                    parseInt($response.filter("#pageNumber").val())          // pageNumber
-                );
-                callback($response.filter("table"));
+                
+                var rowCount = parseInt($($response.filter("#rowCount").val()).text());
+                var pageNumber = parseInt($response.filter("#pageNumber").val());
+                ui.updateData(rowCount, pageNumber);
+                
+                var $table = $response.filter("table");
+                var rowId = 0;
+                $table.find("tr").each(function() {
+                	var $tr = $(this);
+                	if (rowId == 0) {
+                		$tr.prepend("<th>#" + pageNumber + "</th>");
+                	} else {
+                		$tr.prepend("<td>" + ((pageNumber - 1) * itemsPerPage + rowId) + "</td>");
+                	}
+                	rowId++;
+                });
+                
+                callback($table);
             },
             error: function() {
                 alert("server error!");

@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "SQL Tool Extension",
     "description": "Enhance SQL Tool",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "web_accessible_resources": ["lib/*", "codemirror-sql/*", "main.js", "style.css"],
     "content_scripts": [
         {

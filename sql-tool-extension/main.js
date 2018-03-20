@@ -1,5 +1,5 @@
 (function() {
-	var itemsPerPage = 50;
+    var itemsPerPage = 50;
     var $frame = $("#frame");
 
     var sqlEditor = CodeMirror.fromTextArea('sql', {
@@ -68,23 +68,23 @@
             dataType: "html",
             success: function(response) {
                 var $response = $(response);
-                
+
                 var rowCount = parseInt($($response.filter("#rowCount").val()).text());
                 var pageNumber = parseInt($response.filter("#pageNumber").val());
                 ui.updateData(rowCount, pageNumber);
-                
+
                 var $table = $response.filter("table");
                 var rowId = 0;
                 $table.find("tr").each(function() {
-                	var $tr = $(this);
-                	if (rowId == 0) {
-                		$tr.prepend("<th>#" + pageNumber + "</th>");
-                	} else {
-                		$tr.prepend("<td>" + ((pageNumber - 1) * itemsPerPage + rowId) + "</td>");
-                	}
-                	rowId++;
+                    var $tr = $(this);
+                    if (rowId == 0) {
+                        $tr.addClass("title-row").prepend("<th>#" + pageNumber + "</th>");
+                    } else {
+                        $tr.addClass("data-row").prepend("<td>" + ((pageNumber - 1) * itemsPerPage + rowId) + "</td>");
+                    }
+                    rowId++;
                 });
-                
+
                 callback($table);
             },
             error: function() {
@@ -154,4 +154,9 @@
 
     // Result info
     $("#excuteTime").after("<div id='resultInfo' style='display: inline-block; padding-left: 10px;'></div>");
+
+    // Toggle background color when clicking row 
+    $(document).on("click", "table.tableStyle2 tr.data-row td", function() {
+        $(this).parent("tr").toggleClass("checked");
+    });
 })();

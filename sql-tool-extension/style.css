@@ -1,0 +1,11 @@
+table.tableStyle2 tr.data-row:nth-child(odd) td {
+    background: #DAEEF3;
+}
+
+table.tableStyle2 tr.data-row:hover td {
+    background: #A2DEE8;
+}
+
+table.tableStyle2 tr.data-row.checked td {
+    background: #CFCFCF;
+}

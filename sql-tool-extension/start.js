@@ -5,6 +5,14 @@
     newScript.appendChild(inlineScript); 
     (document.head || document.documentElement).appendChild(newScript);
 
+    // Inject styles
+    var styles = [
+        "style.css"
+    ];
+    for (var i = 0; i < styles.length; i++) {
+        loadStyle(styles[i]);
+    }
+
     // Inject scripts
     var loaded = [];
     var scripts = [
@@ -31,5 +39,12 @@
             loaded.push(e);
             this.remove();
         };
+    }
+    function loadStyle(path) {
+        var e = document.createElement('link');
+        (document.head || document.documentElement).appendChild(e);
+        e.href = chrome.extension.getURL(path);
+        e.rel = "stylesheet";
+        e.type = "text/css";
     }
 })();

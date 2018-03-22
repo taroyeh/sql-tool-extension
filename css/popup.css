@@ -1,0 +1,7 @@
+body {
+    min-width: 500px;
+}
+#txtDefaultSql {
+    min-height: 236px;
+    width: 100%;
+}

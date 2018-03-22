@@ -9,5 +9,9 @@
             "matches": ["*://*/*/querySqlTool/goToIndex.action"],
             "js": ["js/start.js"]
         }
-    ]
+    ],
+    "browser_action": {
+        "default_popup": "html/popup.html",
+        "default_title": "SQL Tool Extensions"
+    }
 }

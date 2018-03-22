@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="../libs/jquery-ui/jquery-ui.min.css" />
+        <link rel="stylesheet" type="text/css" href="../css/popup.css" />
+        <script src="../libs/jquery/jquery-1.12.4.min.js"></script>
+        <script src="../libs/jquery-ui/jquery-ui.min.js"></script>
+    </head>
+    <body>
+        <div id="tabs">
+            <ul>
+                <li><a href="#tabs-1">Options</a></li>
+                <li><a href="#tabs-2">Default SQL</a></li>
+                <li><a href="#tabs-3">Colors</a></li>
+                <li><a href="#tabs-4">History</a></li>
+            </ul>
+            <div id="tabs-1">
+                <p>
+                    <input type="checkbox" id="chkF5Execute" />
+                    <label for="chkF5Execute" title="You can use this feature to prevent triggering page refresh when hit F5 button">
+                        Enable hot key: F5 to execute SQL command
+                    </label>
+                </p>
+                <p>
+                    <input type="checkbox" id="chkColorfulSql" />
+                    <label for="chkColorfulSql" title="Automatically coloring the SQL code in the editor">
+                        Colorful SQL editor
+                    </label>
+                </p>
+                <p>
+                    <input type="checkbox" id="chkShowRowNumber" />
+                    <label for="chkShowRowNumber" title="Add row number at the first column">
+                        Show row number
+                    </label>
+                </p>
+                <p>
+                    <input type="checkbox" id="chkAlternateColor" />
+                    <label for="chkAlternateColor" title="You can set the second color in [Colors] tab">
+                        Alternate row background color
+                    </label>
+                </p>
+                <p>
+                    <input type="checkbox" id="chkHighlightCursor" />
+                    <label for="chkHighlightCursor" title="You can set the highlight color in [Colors] tab">
+                        Highlight the row which is under the cursor
+                    </label>
+                </p>
+                <p>
+                    <input type="checkbox" id="chkSelectableRow" />
+                    <label for="chkSelectableRow" title="A fixed color is filled in the selected row. Multiple selection is allowed. &#013;&#010;You can set the color in [Colors] tab">
+                        Selectable row
+                    </label>
+                </p>
+                <p>
+                    <input type="checkbox" id="chkShowCellTitle" />
+                    <label for="chkShowCellTitle" title="The title is shown as tooltip when the cursor stay above a cell">
+                        Show cell title
+                    </label>
+                </p>
+            </div>
+            <div id="tabs-2">
+                <textarea id="txtDefaultSql"></textarea>
+            </div>
+            <div id="tabs-3">To be continued...</div>
+            <div id="tabs-4">To be continued...</div>
+        </div>
+    </body>
+    <script src="../js/popup.js"></script>
+</html>

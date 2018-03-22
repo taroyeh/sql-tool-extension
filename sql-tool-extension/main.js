@@ -75,11 +75,19 @@
 
                 var $table = $response.filter("table");
                 var rowId = 0;
+                var titles = [];
                 $table.find("tr").each(function() {
                     var $tr = $(this);
                     if (rowId == 0) {
+                    	$tr.find("th").each(function() {
+                    		titles.push($(this).text());
+                    	});
                         $tr.addClass("title-row").prepend("<th>#" + pageNumber + "</th>");
                     } else {
+                    	var t = 0;
+                    	$tr.find("td").each(function() {
+                    		$(this).prop("title", titles[t++]);
+                    	});
                         $tr.addClass("data-row").prepend("<td>" + ((pageNumber - 1) * itemsPerPage + rowId) + "</td>");
                     }
                     rowId++;

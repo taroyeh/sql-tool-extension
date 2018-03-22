@@ -7,7 +7,7 @@
 
     // Inject styles
     var styles = [
-        "style.css"
+        "css/extension.css"
     ];
     for (var i = 0; i < styles.length; i++) {
         loadStyle(styles[i]);
@@ -16,9 +16,9 @@
     // Inject scripts
     var loaded = [];
     var scripts = [
-        "lib/jquery.min.js",
-        "codemirror-sql/codemirror.js",
-        "codemirror-sql/mirrorframe.js"
+        "libs/jquery/jquery-1.12.4.min.js",
+        "libs/codemirror/codemirror.js",
+        "libs/codemirror/mirrorframe.js"
     ];
     for (var i = 0; i < scripts.length; i++) {
         loadScript(scripts[i]);
@@ -26,7 +26,7 @@
 
     var timer = setInterval(function() {
         if (loaded.length == scripts.length) {
-            loadScript("main.js");
+            loadScript("js/extension.js");
             clearInterval(timer);
         }
     }, 100);

@@ -3,9 +3,9 @@
     var $frame = $("#frame");
 
     var sqlEditor = CodeMirror.fromTextArea('sql', {
-        path: extensionBaseUrl + "codemirror-sql/",
+        path: extensionBaseUrl + "libs/codemirror/",
         parserfile: "parsesql.js",
-        stylesheet: extensionBaseUrl + "codemirror-sql/sqlcolors.css"
+        stylesheet: extensionBaseUrl + "libs/codemirror/sqlcolors.css"
     });
 
     var ui = (function() {
@@ -79,15 +79,15 @@
                 $table.find("tr").each(function() {
                     var $tr = $(this);
                     if (rowId == 0) {
-                    	$tr.find("th").each(function() {
-                    		titles.push($(this).text());
-                    	});
+                        $tr.find("th").each(function() {
+                            titles.push($(this).text());
+                        });
                         $tr.addClass("title-row").prepend("<th>#" + pageNumber + "</th>");
                     } else {
-                    	var t = 0;
-                    	$tr.find("td").each(function() {
-                    		$(this).prop("title", titles[t++]);
-                    	});
+                        var t = 0;
+                        $tr.find("td").each(function() {
+                            $(this).prop("title", titles[t++]);
+                        });
                         $tr.addClass("data-row").prepend("<td>" + ((pageNumber - 1) * itemsPerPage + rowId) + "</td>");
                     }
                     rowId++;

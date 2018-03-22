@@ -3,11 +3,11 @@
     "name": "SQL Tool Extension",
     "description": "Enhance SQL Tool",
     "version": "0.2.1",
-    "web_accessible_resources": ["lib/*", "codemirror-sql/*", "main.js", "style.css"],
+    "web_accessible_resources": ["libs/*", "css/*", "js/*"],
     "content_scripts": [
         {
             "matches": ["*://*/*/querySqlTool/goToIndex.action"],
-            "js": ["start.js"]
+            "js": ["js/start.js"]
         }
     ]
 }

@@ -9,3 +9,11 @@ table.tableStyle2 tr.data-row:hover td {
 table.tableStyle2 tr.data-row.checked td {
     background: #CFCFCF;
 }
+
+.CodeMirror-wrapping {
+    height: auto !important;
+}
+
+.CodeMirror-wrapping > iframe {
+    resize: auto;
+}

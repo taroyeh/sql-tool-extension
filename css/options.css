@@ -5,3 +5,7 @@ body {
     min-height: 236px;
     width: 100%;
 }
+#divButtonContainer {
+    margin-top: 10px;
+    text-align: right;
+}

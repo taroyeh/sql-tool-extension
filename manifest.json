@@ -4,6 +4,9 @@
     "description": "Enhance SQL Tool",
     "version": "0.3.0",
     "web_accessible_resources": ["libs/*", "images/*", "css/*", "js/*"],
+    "permissions": [
+    	"storage"
+    ],
     "icons": {
     	"16": "images/icon16.png",
         "48": "images/icon48.png",

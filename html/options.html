@@ -18,46 +18,62 @@
         </ul>
         <div id="tabs-1">
           <p>
-            <input type="checkbox" id="chkF5Execute" />
+            <input type="checkbox" id="chkF5Execute" name="f5_execute" class="options-field" />
             <label for="chkF5Execute" title="You can use this feature to prevent triggering page refresh when hit F5 button">
               Enable hot key: F5 to execute SQL command
             </label>
           </p>
           <p>
-            <input type="checkbox" id="chkColorfulSql" />
+            <input type="checkbox" id="chkColorfulSql" name="colorful_sql" class="options-field" />
             <label for="chkColorfulSql" title="Automatically coloring the SQL code in the editor">
               Colorful SQL editor
             </label>
           </p>
           <p>
-            <input type="checkbox" id="chkShowRowNumber" />
+            <input type="checkbox" id="chkShowRowNumber" name="show_row_number" class="options-field" />
             <label for="chkShowRowNumber" title="Add row number at the first column">
               Show row number
             </label>
           </p>
           <p>
-            <input type="checkbox" id="chkAlternateColor" />
+            <input type="checkbox" id="chkAlternateColor" name="alternate_color" class="options-field" />
             <label for="chkAlternateColor" title="You can set the second color in [Colors] tab">
               Alternate row background color
             </label>
           </p>
           <p>
-            <input type="checkbox" id="chkHighlightCursor" />
+            <input type="checkbox" id="chkHighlightCursor" name="highlight_cursor_row" class="options-field" />
             <label for="chkHighlightCursor" title="You can set the highlight color in [Colors] tab">
               Highlight the row which is under the cursor
             </label>
           </p>
           <p>
-            <input type="checkbox" id="chkSelectableRow" />
+            <input type="checkbox" id="chkSelectableRow" name="selectable_row" class="options-field" />
             <label for="chkSelectableRow" title="A fixed color is filled in the selected row. Multiple selection is allowed. &#013;&#010;You can set the color in [Colors] tab">
               Selectable row
             </label>
           </p>
           <p>
-            <input type="checkbox" id="chkShowCellTitle" />
+            <input type="checkbox" id="chkShowCellTitle" name="show_cell_title" class="options-field" />
             <label for="chkShowCellTitle" title="The title is shown as tooltip when the cursor stay above a cell">
               Show cell title
             </label>
+          </p>
+          <p>
+            <label for="selEditorFontSize" title="SQL editor font size">
+              SQL editor font size
+            </label>
+            <select id="selEditorFontSize" name="editor_font_size" class="options-field">
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+              <option value="16">16</option>
+              <option value="17">17</option>
+              <option value="18">18</option>
+            </select>
           </p>
         </div>
         <div id="tabs-2">
@@ -66,9 +82,12 @@
         <div id="tabs-3">To be continued...</div>
         <div id="tabs-4">To be continued...</div>
       </div>
-      <div id="divButtonContainer">
-        <button id="btnReset">Reset</button>
-        <button id="btnSave">Save</button>
+      <div id="divBottom">
+        <div id="divMessage"></div>
+        <div id="divButtons">
+          <button id="btnReset">Reset</button>
+          <button id="btnSave">Save</button>
+        </div>
       </div>
     </form>
   </body>

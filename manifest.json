@@ -3,12 +3,10 @@
     "name": "SQL Tool Extension",
     "description": "Enhance SQL Tool",
     "version": "0.3.0",
-    "web_accessible_resources": ["libs/*", "images/*", "css/*", "js/*"],
-    "permissions": [
-    	"storage"
-    ],
+    "web_accessible_resources": ["libs/*", "images/*", "css/*", "js/*", "js/start.js"],
+    "permissions": ["storage"],
     "icons": {
-    	"16": "images/icon16.png",
+        "16": "images/icon16.png",
         "48": "images/icon48.png",
         "128": "images/icon128.png"
     },
@@ -18,8 +16,14 @@
             "js": ["js/start.js"]
         }
     ],
+    "background": {
+        "scripts": ["js/background.js"]
+    },
     "options_ui": {
-	    "page": "html/options.html",
-	    "chrome_style": false
-	}
+        "page": "html/options.html",
+        "chrome_style": false
+    },
+    "externally_connectable": {
+        "matches": ["http://10.1.54.91:8090/*"]
+    }
 }

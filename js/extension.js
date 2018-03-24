@@ -1,7 +1,8 @@
-(function() {
+function installExtension(extensionId, options) {
     var itemsPerPage = 50;
     var $frame = $("#frame");
 
+    var extensionBaseUrl = "chrome-extension://" + extensionId + "/";
     var sqlEditor = CodeMirror.fromTextArea('sql', {
         path: extensionBaseUrl + "libs/codemirror/",
         parserfile: "parsesql.js",
@@ -167,4 +168,4 @@
     $(document).on("click", "table.tableStyle2 tr.data-row td", function() {
         $(this).parent("tr").toggleClass("checked");
     });
-})();
+}

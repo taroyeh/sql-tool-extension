@@ -1,10 +1,4 @@
 (function() {
-    // Write global variable: extensionBaseUrl
-    var newScript = document.createElement("script");
-    var inlineScript = document.createTextNode("var extensionBaseUrl = '" + chrome.extension.getURL("") + "';");
-    newScript.appendChild(inlineScript); 
-    (document.head || document.documentElement).appendChild(newScript);
-
     // Inject styles
     var styles = [
         "css/extension.css"
@@ -18,18 +12,20 @@
     var scripts = [
         "libs/jquery/jquery-1.12.4.min.js",
         "libs/codemirror/codemirror.js",
-        "libs/codemirror/mirrorframe.js"
+        "libs/codemirror/mirrorframe.js",
+        "js/extension.js"
     ];
     for (var i = 0; i < scripts.length; i++) {
         loadScript(scripts[i]);
     }
 
+    // Wait all scripts registered, then fetch options and install extension
     var timer = setInterval(function() {
         if (loaded.length == scripts.length) {
-            loadScript("js/extension.js");
             clearInterval(timer);
+            chrome.runtime.sendMessage({method: "getOptions"}, install);
         }
-    }, 100);
+    }, 20);
 
     function loadScript(path) {
         var e = document.createElement('script');
@@ -40,11 +36,22 @@
             this.remove();
         };
     }
+
     function loadStyle(path) {
         var e = document.createElement('link');
         (document.head || document.documentElement).appendChild(e);
         e.href = chrome.extension.getURL(path);
         e.rel = "stylesheet";
         e.type = "text/css";
+    }
+
+    function install(options) {
+        var newScript = document.createElement("script");
+        var inlineScript = document.createTextNode(
+            'installExtension("' + chrome.runtime.id + '", ' + JSON.stringify(options) + ');'
+        );
+        newScript.appendChild(inlineScript); 
+        (document.head || document.documentElement).appendChild(newScript);
+        newScript.remove();
     }
 })();

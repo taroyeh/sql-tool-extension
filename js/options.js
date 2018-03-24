@@ -25,7 +25,7 @@
             }
         });
 
-        chrome.storage.sync.set(options, function() {
+        chrome.runtime.sendMessage({method: "setOptions", options: options}, function() {
             var $divMessage = $("#divMessage");
             $divMessage.text("Options saved.");
             setOptionsFields(options);
@@ -35,16 +35,7 @@
         });
     });
 
-    chrome.storage.sync.get({
-        alternate_color: true,
-        colorful_sql: true,
-        f5_execute: true,
-        highlight_cursor_row: true,
-        selectable_row: true,
-        show_cell_title: true,
-        show_row_number: true,
-        editor_font_size: 12
-    }, setOptionsFields);
+    chrome.runtime.sendMessage({method: "getOptions"}, setOptionsFields);
 
     function setOptionsFields(options) {
         $(".options-field").each(function() {

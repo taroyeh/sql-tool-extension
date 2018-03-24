@@ -12,6 +12,7 @@
     };
 
     var messageHandler = function(request, sender, sendResponse) {
+        console.log({request: request, sender: sender});
         if (!request || !request.method) {
             return errorResultHandler("Method not found.", sendResponse);
         }
@@ -21,13 +22,13 @@
         case "getOptions":
             return getOptions(sendResponse);
         case "setOptions":
-            return getOptions(request, sendResponse);
+            return setOptions(request, sendResponse);
         default:
             return errorResultHandler("Wrong method.", sendResponse);
         }
     }
 
-    //chrome.runtime.onMessage.addListener(messageHandler);
+    chrome.runtime.onMessage.addListener(messageHandler);
     chrome.runtime.onMessageExternal.addListener(messageHandler);
 
     function successResultHandler(result, callback) {
@@ -63,9 +64,9 @@
 
     function setOptions(request, callback) {
         if (!request.options) {
-        	return errorResultHandler("options not found.", callback);
+            return errorResultHandler("options not found.", callback);
         }
-        chrome.storage.sync.set(options, callback);
+        chrome.storage.sync.set(request.options, callback);
         return true; // wait callback
     }
 })();

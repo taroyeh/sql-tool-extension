@@ -25,7 +25,8 @@
             }
         });
 
-        chrome.runtime.sendMessage({method: "setOptions", options: options}, function() {
+        chrome.runtime.sendMessage({method: "setOptions", options: options}, function(resp) {
+            console.log("options set");
             var $divMessage = $("#divMessage");
             $divMessage.text("Options saved.");
             setOptionsFields(options);
@@ -35,9 +36,17 @@
         });
     });
 
-    chrome.runtime.sendMessage({method: "getOptions"}, setOptionsFields);
+    chrome.runtime.sendMessage({method: "getOptions"}, function(resp) {
+        if (!resp.success) {
+            console.log(resp.message);
+            return;
+        }
+        setOptionsFields(resp.data);
+    });
 
     function setOptionsFields(options) {
+        console.log("options gotten");
+        console.log(options);
         $(".options-field").each(function() {
             var $this = $(this);
             var name = $this.prop("name");

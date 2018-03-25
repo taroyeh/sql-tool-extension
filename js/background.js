@@ -11,8 +11,7 @@
         editor_font_size: 16
     };
 
-    var messageHandler = function(request, sender, sendResponse) {
-        console.log({request: request, sender: sender});
+    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         if (!request || !request.method) {
             return errorResultHandler("Method not found.", sendResponse);
         }
@@ -26,10 +25,7 @@
         default:
             return errorResultHandler("Wrong method.", sendResponse);
         }
-    }
-
-    chrome.runtime.onMessage.addListener(messageHandler);
-    chrome.runtime.onMessageExternal.addListener(messageHandler);
+    });
 
     function successResultHandler(result, callback) {
         var response = {

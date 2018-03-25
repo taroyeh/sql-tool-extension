@@ -9,7 +9,7 @@
         highlight_cursor_row: true,
         selectable_row: true,
         show_cell_title: true, //
-        editor_font_size: 16
+        editor_font_size: 16 //
     };
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {

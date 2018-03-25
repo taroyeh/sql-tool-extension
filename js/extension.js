@@ -8,12 +8,14 @@ function installExtension(extensionId, options) {
         sqlEditor = CodeMirror.fromTextArea("sql", {
             path: extensionBaseUrl + "libs/codemirror/",
             parserfile: "parsesql.js",
-            stylesheet: [
-                extensionBaseUrl + "libs/codemirror/sqlcolors.css",
-                extensionBaseUrl + "css/editor-custom.css"
-            ],
+            stylesheet: extensionBaseUrl + "libs/codemirror/sqlcolors.css",
             indentUnit: 4,
-            lineNumbers: true
+            lineNumbers: true,
+            onLoad: function(editor) {
+                var fontSizeStyle = options.editor_font_size + "pt";
+                editor.editor.container.style.fontSize = fontSizeStyle;
+                editor.wrapping.style.fontSize = fontSizeStyle;
+            }
         });
     }
 

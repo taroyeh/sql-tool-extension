@@ -19,10 +19,5 @@ table.tableStyle2 tr.data-row.checked td {
     padding: .4em;
     background-color: #F7F7F7;
     font-family: monospace;
-    font-size: 16pt;
     text-align: right;
-}
-
-.CodeMirror-line-numbers > div {
-    line-height: 25px;
 }

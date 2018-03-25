@@ -63,7 +63,9 @@
         if (!request.options) {
             return errorResultHandler("options not found.", callback);
         }
-        chrome.storage.sync.set(request.options, callback);
+        chrome.storage.sync.set(request.options, function(options) {
+            successResultHandler(options, callback);
+        });
         return true; // wait callback
     }
 })();

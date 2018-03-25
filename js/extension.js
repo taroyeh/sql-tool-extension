@@ -2,12 +2,20 @@ function installExtension(extensionId, options) {
     var itemsPerPage = 50;
     var $frame = $("#frame");
 
-    var extensionBaseUrl = "chrome-extension://" + extensionId + "/";
-    var sqlEditor = CodeMirror.fromTextArea('sql', {
-        path: extensionBaseUrl + "libs/codemirror/",
-        parserfile: "parsesql.js",
-        stylesheet: extensionBaseUrl + "libs/codemirror/sqlcolors.css"
-    });
+    var sqlEditor = null;
+    if (options.colorful_sql == true) {
+        var extensionBaseUrl = "chrome-extension://" + extensionId + "/";
+        sqlEditor = CodeMirror.fromTextArea("sql", {
+            path: extensionBaseUrl + "libs/codemirror/",
+            parserfile: "parsesql.js",
+            stylesheet: [
+                extensionBaseUrl + "libs/codemirror/sqlcolors.css",
+                extensionBaseUrl + "css/editor-custom.css"
+            ],
+            indentUnit: 4,
+            lineNumbers: true
+        });
+    }
 
     var ui = (function() {
         var intervalControl = null;
@@ -108,8 +116,7 @@ function installExtension(extensionId, options) {
 
     // Override the outer function
     this.search = function(type) {
-        //var sqlStr = $("#sql").val();
-        var sqlStr = sqlEditor.getCode();
+        var sqlStr = (sqlEditor == null ? $("#sql").val() : sqlEditor.getCode());
         if($.trim(sqlStr) == ""){
             alert("Please enter the SQL script!");
             return;
@@ -126,8 +133,14 @@ function installExtension(extensionId, options) {
         ui.resetData();
         ui.clearFrame();
 
-        ajaxExcuteSql(data, function($table) {
-            $frame.append($table);
+        ajaxExcuteSql(data, function(htmlResponse) {
+            var $response = handleHtmlResponse(htmlResponse);
+            if (options.auto_load_next_page == true) {
+                var $table = $response.filter("table");
+                $frame.append($table);
+            } else {
+                $frame.append($response);
+            }
         });
     }
 
@@ -135,31 +148,77 @@ function installExtension(extensionId, options) {
         var data = $frame.data("data");
         data.pageNumber++;
 
-        ajaxExcuteSql(data, function($table) {
+        ajaxExcuteSql(data, function(htmlResponse) {
+            var $response = handleHtmlResponse(htmlResponse);
+            var $table = $response.filter("table");
             $frame.find("table").append($table.find("tr"));
         });
     }
 
-    // F5: execute SQL command
-    var f5Handler = function(e) {
-        if ((e.which || e.keyCode) == 116) {
-            e.preventDefault();
-            search('readOnly');
-        }
-    };
-    $(document).bind("keydown", f5Handler);
-    $(sqlEditor.frame.contentWindow.document).bind("keydown", f5Handler);
+    function handleHtmlResponse(htmlResponse) {
+        var $response = $(htmlResponse);
 
-    // Load more data (next page) when scroll near bottom of page
-    $(window).scroll(function() {
-        if($(window).scrollTop() + $(window).height() < $(document).height() - 500) {
-            return;
+        var rowCount = parseInt($($response.filter("#rowCount").val()).text());
+        var pageNumber = parseInt($response.filter("#pageNumber").val());
+        ui.updateData(rowCount, pageNumber);
+
+        var $table = $response.filter("table");
+        var rowId = 0;
+        var titles = [];
+        $table.find("tr").each(function() {
+            var $tr = $(this);
+            if (rowId == 0) {
+                if (options.show_cell_title == true) {
+                    $tr.find("th").each(function() {
+                        titles.push($(this).text());
+                    });
+                }
+                if (options.show_row_number == true) {
+                    $tr.addClass("title-row").prepend("<th>#" + pageNumber + "</th>");
+                }
+            } else {
+                if (options.show_cell_title == true) {
+                    var t = 0;
+                    $tr.find("td").each(function() {
+                        $(this).prop("title", titles[t++]);
+                    });
+                }
+                if (options.show_row_number == true) {
+                    $tr.addClass("data-row").prepend("<td>" + ((pageNumber - 1) * itemsPerPage + rowId) + "</td>");
+                }
+            }
+            rowId++;
+        });
+
+        return $response;
+    }
+
+    // F5: execute SQL command
+    if (options.f5_execute == true) {
+        var f5Handler = function(e) {
+            if ((e.which || e.keyCode) == 116) {
+                e.preventDefault();
+                search('readOnly');
+            }
+        };
+        $(document).bind("keydown", f5Handler);
+        if (sqlEditor != null) {
+            $(sqlEditor.frame.contentWindow.document).bind("keydown", f5Handler);
         }
-        if (!ui.canLoadMore()) {
-            return;
-        }
-        loadMore();
-    });
+    }
+
+    // Load more data (next page) when scrolling near bottom of page
+    if (options.auto_load_next_page == true) {
+        $(window).scroll(function() {
+            if($(window).scrollTop() + $(window).height() < $(document).height() - 500) {
+                return;
+            }
+            if (!ui.canLoadMore()) {
+                return;
+            }
+            loadMore();
+        });
+    }
 
     // Result info
     $("#excuteTime").after("<div id='resultInfo' style='display: inline-block; padding-left: 10px;'></div>");

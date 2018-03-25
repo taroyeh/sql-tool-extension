@@ -1,14 +1,12 @@
 html {
   cursor: text;
-  background: #E5F1F4;
-  border: 1px solid #C4C9FD !important;
 }
 
 .editbox {
   margin: .4em;
   padding: 0;
   font-family: monospace;
-  font-size: 16pt;
+  font-size: 10pt;
   color: black;
 }
 

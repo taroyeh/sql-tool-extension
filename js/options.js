@@ -26,6 +26,9 @@
         });
 
         chrome.runtime.sendMessage({method: "setOptions", options: options}, function(resp) {
+            if (!resp.success) {
+                return;
+            }
             var $divMessage = $("#divMessage");
             $divMessage.text("Options saved.");
             setOptionsFields(options);

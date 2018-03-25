@@ -23,7 +23,12 @@
     var timer = setInterval(function() {
         if (loaded.length == scripts.length) {
             clearInterval(timer);
-            chrome.runtime.sendMessage({method: "getOptions"}, install);
+            chrome.runtime.sendMessage({method: "getOptions"}, function(resp) {
+                if (!resp.success) {
+                    return;
+                }
+                install(resp.data);
+            });
         }
     }, 20);
 

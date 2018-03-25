@@ -1,15 +1,12 @@
 (function() {
     // DO NOT use directly, you should use cloneDefaultOptions() to get a cloned options
     var defaultOptions = {
-        f5_execute: true, //
-        auto_load_next_page: true, //
-        colorful_sql: true, //
-        show_row_number: true, //
-        alternate_color: true,
-        highlight_cursor_row: true,
-        selectable_row: true,
-        show_cell_title: true, //
-        editor_font_size: 16 //
+        f5_execute: true,
+        auto_load_next_page: true,
+        colorful_sql: true,
+        show_row_number: true,
+        show_cell_title: true,
+        editor_font_size: 16
     };
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {

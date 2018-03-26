@@ -1,3 +1,8 @@
+form[name=sqlForm] > div {
+    margin: auto;
+    width: 97%;
+}
+
 table.tableStyle2 tr.data-row:nth-child(odd) td {
     background: #DAEEF3;
 }
@@ -11,8 +16,16 @@ table.tableStyle2 tr.data-row.checked td {
 }
 
 .CodeMirror-wrapping {
+    height: 150px;
     border: 1px solid #C4C9FD;
+    resize: both;
+    overflow: auto;
     /*background: #E5F1F4;*/
+}
+
+.CodeMirror-wrapping > iframe {
+    margin-left: -17px;
+    margin-right: -16px;
 }
 
 .CodeMirror-line-numbers {

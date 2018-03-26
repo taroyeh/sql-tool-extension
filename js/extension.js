@@ -1,6 +1,11 @@
 function installExtension(extensionId, options) {
     var itemsPerPage = 50;
     var $frame = $("#frame");
+    
+    $("#sql").css({
+        width: "initial",
+        height: "initial"
+    });
 
     var sqlEditor = null;
     if (options.colorful_sql == true) {

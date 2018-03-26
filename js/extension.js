@@ -82,35 +82,7 @@ function installExtension(extensionId, options) {
             timeout: 3600000, // one hour
             data: data,
             dataType: "html",
-            success: function(response) {
-                var $response = $(response);
-
-                var rowCount = parseInt($($response.filter("#rowCount").val()).text());
-                var pageNumber = parseInt($response.filter("#pageNumber").val());
-                ui.updateData(rowCount, pageNumber);
-
-                var $table = $response.filter("table");
-                var rowId = 0;
-                var titles = [];
-                $table.find("tr").each(function() {
-                    var $tr = $(this);
-                    if (rowId == 0) {
-                        $tr.find("th").each(function() {
-                            titles.push($(this).text());
-                        });
-                        $tr.addClass("title-row").prepend("<th>#" + pageNumber + "</th>");
-                    } else {
-                        var t = 0;
-                        $tr.find("td").each(function() {
-                            $(this).prop("title", titles[t++]);
-                        });
-                        $tr.addClass("data-row").prepend("<td>" + ((pageNumber - 1) * itemsPerPage + rowId) + "</td>");
-                    }
-                    rowId++;
-                });
-
-                callback($table);
-            },
+            success: callback,
             error: function() {
                 alert("server error!");
                 ui.clearFrame();

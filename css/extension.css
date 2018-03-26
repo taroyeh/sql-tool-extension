@@ -20,7 +20,7 @@ table.tableStyle2 tr.data-row.checked td {
     border: 1px solid #C4C9FD;
     resize: both;
     overflow: auto;
-    /*background: #E5F1F4;*/
+    background: #E5F1F4;
 }
 
 .CodeMirror-wrapping > iframe {
@@ -30,7 +30,8 @@ table.tableStyle2 tr.data-row.checked td {
 
 .CodeMirror-line-numbers {
     padding: .4em;
-    background-color: #F7F7F7;
+    background-color: #5BAFC7;
+    color: white;
     font-family: monospace;
     text-align: right;
 }

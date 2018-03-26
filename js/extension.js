@@ -1,14 +1,15 @@
 function installExtension(extensionId, options) {
     var itemsPerPage = 50;
     var $frame = $("#frame");
-    
-    $("#sql").css({
-        width: "initial",
-        height: "initial"
-    });
 
     var sqlEditor = null;
     if (options.colorful_sql == true) {
+
+        $("#sql").css({
+            width: "initial",
+            height: "initial"
+        });
+
         var extensionBaseUrl = "chrome-extension://" + extensionId + "/";
         sqlEditor = CodeMirror.fromTextArea("sql", {
             path: extensionBaseUrl + "libs/codemirror/",
@@ -21,6 +22,10 @@ function installExtension(extensionId, options) {
                 editor.editor.container.style.fontSize = fontSizeStyle;
                 editor.wrapping.style.fontSize = fontSizeStyle;
             }
+        });
+    } else {
+        $("#sql").css({
+            fontSize: options.editor_font_size + "pt"
         });
     }
 

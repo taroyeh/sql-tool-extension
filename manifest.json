@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "SQL Tool Extension",
     "description": "Enhance SQL Tool",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "web_accessible_resources": ["libs/*", "images/*", "css/*", "js/*", "js/start.js"],
     "permissions": ["storage"],
     "icons": {

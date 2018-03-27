@@ -87,7 +87,10 @@ function installExtension(extensionId, options) {
             timeout: 3600000, // one hour
             data: data,
             dataType: "html",
-            success: callback,
+            success: function(htmlResponse) {
+                var $response = handleHtmlResponse(htmlResponse);
+                callback($response);
+            },
             error: function() {
                 alert("server error!");
                 ui.clearFrame();
@@ -117,23 +120,39 @@ function installExtension(extensionId, options) {
         ui.resetData();
         ui.clearFrame();
 
-        ajaxExcuteSql(data, function(htmlResponse) {
-            var $response = handleHtmlResponse(htmlResponse);
+        ajaxExcuteSql(data, function($response) {
+            var $table = $response.filter("table");
             if (options.auto_load_next_page == true) {
-                var $table = $response.filter("table");
                 $frame.append($table);
             } else {
                 $frame.append($response);
             }
+            var titles = $table.data("titles");
+            var sameTitle = fetchFirstSameTitle(titles);
+            if (sameTitle != null) {
+                alert("WARNING:\n\n" +
+                        "There are some columns with the same name: [" + sameTitle + "].\n\n" +
+                        "You should know that there are some bugs occurred when selecting same column names.");
+            }
         });
+
+        function fetchFirstSameTitle(titles) {
+            for (var j = 1; j < titles.length; j++) {
+                for (var i = 0; i < j; i++) {
+                    if (titles[i] == titles[j]) {
+                        return titles[i];
+                    }
+                }
+            }
+            return null;
+        }
     }
 
     function loadMore() {
         var data = $frame.data("data");
         data.pageNumber++;
 
-        ajaxExcuteSql(data, function(htmlResponse) {
-            var $response = handleHtmlResponse(htmlResponse);
+        ajaxExcuteSql(data, function($response) {
             var $table = $response.filter("table");
             $frame.find("table").append($table.find("tr"));
         });
@@ -173,6 +192,7 @@ function installExtension(extensionId, options) {
             }
             rowId++;
         });
+        $table.data("titles", titles);
 
         return $response;
     }

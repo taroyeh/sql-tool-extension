@@ -18,39 +18,43 @@
         color_result_selected_row_background: "CFCFCF"
     };
 
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    chrome.runtime.onMessage.addListener(function(request, sender, responseCallback) {
         if (!request || !request.method) {
-            return errorResultHandler("Method not found.", sendResponse);
+            return errorResultHandler("Method not found.", responseCallback);
         }
         switch (request.method) {
         case "getDefaultOptions":
-            return successResultHandler(cloneDefaultOptions(), sendResponse);
+            return successResultHandler(cloneDefaultOptions(), responseCallback);
         case "getOptions":
-            return getOptions(sendResponse);
+            return getOptionsResponse(responseCallback);
         case "setOptions":
-            return setOptions(request, sendResponse);
+            return setOptionsResponse(request, responseCallback);
+        case "getColorCss":
+            return getColorCssResponse(responseCallback);
         default:
-            return errorResultHandler("Wrong method.", sendResponse);
+            return errorResultHandler("Wrong method.", responseCallback);
         }
     });
 
-    function successResultHandler(result, callback) {
+    // responseCallback = function(response) { ... }
+    function successResultHandler(result, responseCallback) {
         var response = {
             success: true,
             message: "",
             data: result
         };
-        callback(response);
+        responseCallback(response);
         return false; // no wait callback
     }
 
-    function errorResultHandler(message, callback) {
+    // responseCallback = function(response) { ... }
+    function errorResultHandler(message, responseCallback) {
         var response = {
             success: false,
             message: message,
             data: null
         };
-        callback(response);
+        responseCallback(response);
         return false; // no wait callback
     }
 
@@ -58,19 +62,36 @@
         return Object.assign({}, defaultOptions);
     }
 
+    // callback = function(options) { ... }
     function getOptions(callback) {
-        chrome.storage.sync.get(cloneDefaultOptions(), function(options) {
-            successResultHandler(options, callback);
+        chrome.storage.sync.get(cloneDefaultOptions(), callback);
+        return true; // wait callback
+    }
+
+    // responseCallback = function(response) { ... }
+    function getOptionsResponse(responseCallback) {
+        getOptions(function(options) {
+            successResultHandler(options, responseCallback);
         });
         return true; // wait callback
     }
 
-    function setOptions(request, callback) {
+    // request = { options: { ... } }
+    // responseCallback = function(response) { ... }
+    function setOptionsResponse(request, responseCallback) {
         if (!request.options) {
-            return errorResultHandler("options not found.", callback);
+            return errorResultHandler("options not found.", responseCallback);
         }
         chrome.storage.sync.set(request.options, function(options) {
-            successResultHandler(options, callback);
+            successResultHandler(options, responseCallback);
+        });
+        return true; // wait callback
+    }
+
+    // responseCallback = function(response) { ... }
+    function getColorCssResponse(responseCallback) {
+        getOptions(function(options) {
+            // TODO: generate css
         });
         return true; // wait callback
     }

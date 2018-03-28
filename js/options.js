@@ -3,6 +3,13 @@
 
     $("button").button();
 
+    $("button.hidden").click(function(e) {
+        // Do nothing.
+        // Since the first button inside the form will be triggered the click event when pressing ENTER key,
+        // so we put a hidden dummy button to capture the strange situation and then do nothing.
+        e.preventDefault();
+    });
+
     $("#btnReset").click(function(e) {
         e.preventDefault();
         $("#fmOptions")[0].reset();
@@ -92,7 +99,7 @@
                 layout: {
                     // Left, Top, Width, Height (in table cells).
                     map: [0, 0, 1, 1],
-                    bar: [1, 0, 1, 1]                            
+                    bar: [1, 0, 1, 1]
                 },
                 part: {
                     map: { size: 128 },

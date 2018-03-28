@@ -1,8 +1,5 @@
 (function() {
-    $("#tabs").tabs().css({
-       "min-height": "348px",
-       "overflow": "auto"
-    });
+    $("#tabs").tabs();
 
     $("button").button();
 
@@ -43,6 +40,7 @@
             return;
         }
         setOptionsFields(resp.data);
+        setColorPicker();
     });
 
     function setOptionsFields(options) {
@@ -82,6 +80,31 @@
             }
 
             $this.val(options[name]);
+        });
+    }
+
+    function setColorPicker() {
+        $('.color-item').each(function() {
+            var $colorItem = $(this);
+            var $colorDsiplay = $colorItem.find(".display");
+            var $colorpicker = $colorItem.find(".text").colorpicker({
+                parts: ['map', 'bar'],
+                layout: {
+                    // Left, Top, Width, Height (in table cells).
+                    map: [0, 0, 1, 1],
+                    bar: [1, 0, 1, 1]                            
+                },
+                part: {
+                    map: { size: 128 },
+                    bar: { size: 128 }
+                },
+                altField: $colorDsiplay,
+                altProperties: 'background-color'
+            });
+            $colorDsiplay.click(function(e) {
+                e.stopPropagation();
+                $colorpicker.colorpicker("open");
+            });
         });
     }
 })();

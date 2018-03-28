@@ -3,20 +3,22 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="../libs/jquery-ui/jquery-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/jquery-colorpicker/jquery.colorpicker.css" />
     <link rel="stylesheet" type="text/css" href="../css/options.css" />
     <script src="../libs/jquery/jquery-1.12.4.min.js"></script>
     <script src="../libs/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../libs/jquery-colorpicker/jquery.colorpicker.js"></script>
   </head>
   <body>
     <form id="fmOptions">
       <div id="tabs">
         <ul>
-          <li><a href="#tabs-1">General</a></li>
-          <li><a href="#tabs-2">Default SQL</a></li>
-          <li><a href="#tabs-3">Colors</a></li>
-          <li><a href="#tabs-4">History</a></li>
+          <li><a href="#tabGeneral">General</a></li>
+          <li><a href="#tabSql">Default SQL</a></li>
+          <li><a href="#tabColors">Colors</a></li>
+          <li><a href="#tabHistory">History</a></li>
         </ul>
-        <div id="tabs-1">
+        <div id="tabGeneral">
           <p>
             <input type="checkbox" id="chkF5Execute" name="f5_execute" class="options-field" />
             <label for="chkF5Execute" title="You can use this feature to prevent triggering page refresh when hit F5 button">
@@ -64,11 +66,47 @@
             </select>
           </p>
         </div>
-        <div id="tabs-2">
+        <div id="tabSql">
           <textarea id="txtDefaultSql" disabled="disabled">Keep on working...</textarea>
         </div>
-        <div id="tabs-3">Keep on working...</div>
-        <div id="tabs-4">Keep on working...</div>
+        <div id="tabColors">
+          <div class="color-item">
+            #<input type="text" class="text options-field" name="color_sql_editor_background" />
+            <div class="display"></div>
+            <div class="label">SQL editor background</div>
+          </div>
+          <div class="color-item">
+            #<input type="text" class="text options-field" name="color_sql_editor_border" />
+            <div class="display"></div>
+            <div class="label">SQL editor border</div>
+          </div>
+          <div class="color-item">
+            #<input type="text" class="text options-field" name="color_sql_editor_line_number"/>
+            <div class="display"></div>
+            <div class="label">SQL editor line number</div>
+          </div>
+          <div class="color-item">
+            #<input type="text" class="text options-field" name="color_sql_editor_line_number_background"  />
+            <div class="display"></div>
+            <div class="label">SQL editor line number background</div>
+          </div>
+          <div class="color-item">
+            #<input type="text" class="text options-field" name="color_result_alternative_row_background" />
+            <div class="display"></div>
+            <div class="label">Result alternative row background</div>
+          </div>
+          <div class="color-item">
+            #<input type="text" class="text options-field" name="color_result_mouse_over_row_background" />
+            <div class="display"></div>
+            <div class="label">Result mouse over row background</div>
+          </div>
+          <div class="color-item">
+            #<input type="text" class="text options-field" name="color_result_selected_row_background" />
+            <div class="display"></div>
+            <div class="label">Result selected row background</div>
+          </div>
+        </div>
+        <div id="tabHistory">Keep on working...</div>
       </div>
       <div id="divBottom">
         <div id="divMessage"></div>

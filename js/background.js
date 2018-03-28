@@ -1,12 +1,21 @@
 (function() {
     // DO NOT use directly, you should use cloneDefaultOptions() to get a cloned options
     var defaultOptions = {
+        // General
         f5_execute: true,
         auto_load_next_page: true,
         colorful_sql: true,
         show_row_number: true,
         show_cell_title: true,
-        editor_font_size: 16
+        editor_font_size: 16,
+        // Colors
+        color_sql_editor_background: "E5F1F4",
+        color_sql_editor_border: "C4C9FD",
+        color_sql_editor_line_number: "FFFFFF",
+        color_sql_editor_line_number_background: "5BAFC7",
+        color_result_alternative_row_background: "DAEEF3",
+        color_result_mouse_over_row_background: "A2DEE8",
+        color_result_selected_row_background: "CFCFCF"
     };
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {

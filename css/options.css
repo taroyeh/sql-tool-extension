@@ -1,5 +1,10 @@
 body {
-    min-width: 500px;
+    min-width: 600px;
+    min-height: 450px;
+}
+#tabs {
+    min-height: 400px;
+    overflow: auto;
 }
 #divBottom {
     height: 30px;
@@ -20,4 +25,22 @@ body {
     resize: none;
     height: 268px;
     width: 100%;
+}
+.color-item {
+    margin: 3px 0;
+}
+.color-item > .text {
+    width: 60px;
+    font-family: monospace;
+}
+.color-item > .display {
+    display: inline-block;
+    border: 1px solid black;
+    width: 40px;
+    height: 12px;
+    margin: 0 3px -3px;
+}
+.color-item > .label {
+    display: inline-block;
+    width: 400px;
 }

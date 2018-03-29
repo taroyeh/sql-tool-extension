@@ -117,7 +117,7 @@ function installExtension(extensionId, options) {
                 continue;
             }
             var setting = colorStyleMapping[opt];
-            cssContent += setting.selector + " { " + setting.property + " : #" + options[opt] + " } \n";
+            cssContent += setting.selector + " { " + setting.property + " : #" + options[opt] + "; } \n";
         }
         var styleSheet = document.createElement("style");
         styleSheet.appendChild(document.createTextNode(cssContent)); 

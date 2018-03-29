@@ -79,6 +79,51 @@ function installExtension(extensionId, options) {
         };
     })();
 
+    (function applyColorStyle() {
+        var colorStyleMapping = {
+            color_sql_editor_background: {
+                selector: ".CodeMirror-wrapping",
+                property: "background-color"
+            },
+            color_sql_editor_border: {
+                selector: ".CodeMirror-wrapping",
+                property: "border-color"
+            },
+            color_sql_editor_line_number: {
+                selector: ".CodeMirror-line-numbers",
+                property: "color"
+            },
+            color_sql_editor_line_number_background: {
+                selector: ".CodeMirror-line-numbers",
+                property: "background-color"
+            },
+            color_result_alternative_row_background: {
+                selector: "table.tableStyle2 tr.data-row:nth-child(odd) td",
+                property: "background-color"
+            },
+            color_result_mouse_over_row_background: {
+                selector: "table.tableStyle2 tr.data-row:hover td",
+                property: "background-color"
+            },
+            color_result_selected_row_background: {
+                selector: "table.tableStyle2 tr.data-row.checked td",
+                property: "background-color"
+            }
+        };
+
+        var cssContent = "";
+        for (var opt in colorStyleMapping) {
+            if (!colorStyleMapping.hasOwnProperty(opt)) {
+                continue;
+            }
+            var setting = colorStyleMapping[opt];
+            cssContent += setting.selector + " { " + setting.property + " : #" + options[opt] + " } \n";
+        }
+        var styleSheet = document.createElement("style");
+        styleSheet.appendChild(document.createTextNode(cssContent)); 
+        (document.head || document.documentElement).appendChild(styleSheet);
+    })();
+
     function ajaxExcuteSql(data, callback) {
         ui.startLoading();
         currentAjax = $.ajax({

@@ -33,7 +33,7 @@
     }, 20);
 
     function loadScript(path) {
-        var e = document.createElement('script');
+        var e = document.createElement("script");
         (document.head || document.documentElement).appendChild(e);
         e.src = chrome.extension.getURL(path);
         e.onload = function() {
@@ -43,7 +43,7 @@
     }
 
     function loadStyle(path) {
-        var e = document.createElement('link');
+        var e = document.createElement("link");
         (document.head || document.documentElement).appendChild(e);
         e.href = chrome.extension.getURL(path);
         e.rel = "stylesheet";

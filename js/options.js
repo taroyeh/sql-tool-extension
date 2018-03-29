@@ -1,4 +1,6 @@
 (function() {
+    var colorpickers = [];
+
     $("#tabs").tabs();
 
     $("button").button();
@@ -13,6 +15,10 @@
     $("#btnReset").click(function(e) {
         e.preventDefault();
         $("#fmOptions")[0].reset();
+        for (var i = 0; i < colorpickers.length; i++) {
+            var $colorpicker = colorpickers[i];
+            $colorpicker.colorpicker("setColor", $colorpicker[0].value);
+        }
     });
 
     $("#btnSave").click(function(e) {
@@ -86,16 +92,15 @@
                 return;
             }
 
-            $this.val(options[name]);
+            $this.attr("value", options[name]);
         });
     }
 
     function setColorPicker() {
-        $('.color-item').each(function() {
+        $(".color-item").each(function() {
             var $colorItem = $(this);
-            var $colorDsiplay = $colorItem.find(".display");
             var $colorpicker = $colorItem.find(".text").colorpicker({
-                parts: ['map', 'bar'],
+                parts: ["map", "bar"],
                 layout: {
                     // Left, Top, Width, Height (in table cells).
                     map: [0, 0, 1, 1],
@@ -105,13 +110,10 @@
                     map: { size: 128 },
                     bar: { size: 128 }
                 },
-                altField: $colorDsiplay,
-                altProperties: 'background-color'
+                altField: $colorItem.find(".display"),
+                altProperties: "background-color"
             });
-            $colorDsiplay.click(function(e) {
-                e.stopPropagation();
-                $colorpicker.colorpicker("open");
-            });
+            colorpickers.push($colorpicker);
         });
     }
 })();

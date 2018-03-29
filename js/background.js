@@ -8,6 +8,8 @@
         show_row_number: true,
         show_cell_title: true,
         editor_font_size: 16,
+        // Default SQL
+        default_sql: "Keep on working...",
         // Colors
         color_sql_editor_background: "E5F1F4",
         color_sql_editor_border: "C4C9FD",

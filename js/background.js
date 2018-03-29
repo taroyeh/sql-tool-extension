@@ -31,8 +31,6 @@
             return getOptionsResponse(responseCallback);
         case "setOptions":
             return setOptionsResponse(request, responseCallback);
-        case "getColorCss":
-            return getColorCssResponse(responseCallback);
         default:
             return errorResultHandler("Wrong method.", responseCallback);
         }
@@ -86,14 +84,6 @@
         }
         chrome.storage.sync.set(request.options, function(options) {
             successResultHandler(options, responseCallback);
-        });
-        return true; // wait callback
-    }
-
-    // responseCallback = function(response) { ... }
-    function getColorCssResponse(responseCallback) {
-        getOptions(function(options) {
-            // TODO: generate css
         });
         return true; // wait callback
     }

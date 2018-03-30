@@ -17,7 +17,11 @@
         }
     ],
     "background": {
-        "scripts": ["js/background.js"]
+        "scripts": [
+            "libs/poor-mans-t-sql-formatter/bridge.min.js",
+            "libs/poor-mans-t-sql-formatter/PoorMansTSqlFormatterJS.min.js",
+            "js/background.js"
+        ]
     },
     "options_ui": {
         "page": "html/options.html",

@@ -247,12 +247,46 @@ function installExtension(extensionId, options) {
         var f5Handler = function(e) {
             if ((e.which || e.keyCode) == 116) {
                 e.preventDefault();
-                search('readOnly');
+                search("readOnly");
             }
         };
         $(document).bind("keydown", f5Handler);
         if (sqlEditor != null) {
             $(sqlEditor.frame.contentWindow.document).bind("keydown", f5Handler);
+        }
+    }
+
+    // Ctrl + Shift + F: format SQL
+    if (options.sql_formatter == true) {
+        var formatSqlHandler = function() {
+            var sqlStr = (sqlEditor == null ? $("#sql").val() : sqlEditor.getCode());
+            chrome.runtime.sendMessage(extensionId, {method: "formatSql", sql: sqlStr}, function(resp) {
+                if (!resp.success) {
+                    return;
+                }
+                if (sqlEditor == null) {
+                    $("#sql").val(resp.data);
+                } else {
+                    sqlEditor.setCode(resp.data);
+                }
+            });
+        };
+        var keyPressHandler = function(e) {
+            if (e.ctrlKey && e.shiftKey && ((e.which || e.keyCode) == 6)) {
+                e.preventDefault();
+                formatSqlHandler();
+            }
+        };
+        var $button = $("<input type='button' id='btnFormat' value=' Format SQL ' title='Ctrl + Shift + F' />").click(formatSqlHandler);
+        $("input[type=button]").each(function() {
+            var $this = $(this);
+            if ($.trim($this.val()) == "query") {
+                $this.before($button.attr("style", $this.attr("style"))).before(" ");
+            }
+        });
+        $(document).bind("keypress", keyPressHandler);
+        if (sqlEditor != null) {
+            $(sqlEditor.frame.contentWindow.document).bind("keypress", keyPressHandler);
         }
     }
 

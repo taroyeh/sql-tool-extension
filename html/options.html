@@ -16,6 +16,7 @@
           <li><a href="#tabGeneral">General</a></li>
           <li><a href="#tabSql">Default SQL</a></li>
           <li><a href="#tabColors">Colors</a></li>
+          <li><a href="#tabFormat">Format</a></li>
           <li><a href="#tabHistory">History</a></li>
         </ul>
         <div id="tabGeneral">
@@ -23,6 +24,12 @@
             <input type="checkbox" id="chkF5Execute" name="f5_execute" class="options-field" />
             <label for="chkF5Execute" title="You can use this feature to prevent triggering page refresh when hit F5 button">
               Enable hot key: F5 to execute SQL command
+            </label>
+          </p>
+          <p>
+            <input type="checkbox" id="chkSqlFormatter" name="sql_formatter" class="options-field" />
+            <label for="chkSqlFormatter" title="You can configure details in [Formatter]">
+              SQL formatter (Hot key: Ctrl + Shift + F)
             </label>
           </p>
           <p>
@@ -106,6 +113,7 @@
             <div class="label">Result selected row background</div>
           </div>
         </div>
+        <div id="tabFormat">Keep on working...</div>
         <div id="tabHistory">Keep on working...</div>
       </div>
       <div id="divBottom">

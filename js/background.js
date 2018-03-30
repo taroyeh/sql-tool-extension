@@ -1,8 +1,11 @@
+// Required: PoorMansTSqlFormatterJS.min.js
+
 (function() {
     // DO NOT use directly, you should use cloneDefaultOptions() to get a cloned options
     var defaultOptions = {
         // General
         f5_execute: true,
+        sql_formatter: true,
         auto_load_next_page: true,
         colorful_sql: true,
         show_row_number: true,
@@ -20,7 +23,7 @@
         color_result_selected_row_background: "CFCFCF"
     };
 
-    chrome.runtime.onMessage.addListener(function(request, sender, responseCallback) {
+    var internalMessageHandler = function(request, sender, responseCallback) {
         if (!request || !request.method) {
             return errorResultHandler("Method not found.", responseCallback);
         }
@@ -31,10 +34,26 @@
             return getOptionsResponse(responseCallback);
         case "setOptions":
             return setOptionsResponse(request, responseCallback);
+        case "formatSql":
+            return formatSqlResponse(request, responseCallback);
         default:
             return errorResultHandler("Wrong method.", responseCallback);
         }
-    });
+    };
+    var externalMessageHandler = function(request, sender, responseCallback) {
+        if (!request || !request.method) {
+            return errorResultHandler("Method not found.", responseCallback);
+        }
+        switch (request.method) {
+        // Add allowed methods in white list below, pass it to internal handler
+        case "formatSql":
+            return internalMessageHandler(request, sender, responseCallback);
+        default:
+            return errorResultHandler("Wrong method.", responseCallback);
+        }
+    }
+    chrome.runtime.onMessageExternal.addListener(externalMessageHandler);
+    chrome.runtime.onMessage.addListener(internalMessageHandler);
 
     // responseCallback = function(response) { ... }
     function successResultHandler(result, responseCallback) {
@@ -70,10 +89,9 @@
 
     // responseCallback = function(response) { ... }
     function getOptionsResponse(responseCallback) {
-        getOptions(function(options) {
+        return getOptions(function(options) {
             successResultHandler(options, responseCallback);
         });
-        return true; // wait callback
     }
 
     // request = { options: { ... } }
@@ -86,5 +104,15 @@
             successResultHandler(options, responseCallback);
         });
         return true; // wait callback
+    }
+
+    // request = { sql: "SQL text" }
+    // responseCallback = function(response) { ... }
+    function formatSqlResponse(request, responseCallback) {
+        if (!request.sql) {
+            return errorResultHandler("sql not found.", responseCallback);
+        }
+        var formattedSql = PoorMansTSqlFormatterLib.SqlFormattingManager.DefaultFormat(request.sql);
+        return successResultHandler(formattedSql, responseCallback);
     }
 })();

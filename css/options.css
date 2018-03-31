@@ -29,8 +29,11 @@ body {
     height: 268px;
     width: 100%;
 }
-.color-item {
+.tab-item {
     margin: 13.2px 0;
+}
+.tab-item > * {
+    vertical-align: middle;
 }
 .color-item > .text {
     width: 60px;
@@ -41,7 +44,7 @@ body {
     border: 1px solid black;
     width: 40px;
     height: 12px;
-    margin: 0 3px -3px;
+    margin: 0 3px;
 }
 .color-item > .label {
     display: inline-block;

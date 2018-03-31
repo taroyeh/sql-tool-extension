@@ -20,7 +20,24 @@
         color_sql_editor_line_number_background: "5BAFC7",
         color_result_alternative_row_background: "DAEEF3",
         color_result_mouse_over_row_background: "A2DEE8",
-        color_result_selected_row_background: "CFCFCF"
+        color_result_selected_row_background: "CFCFCF",
+        // Format
+        format_indent_string: "  ",
+        format_spaces_per_tab: 2,
+        format_max_line_width: 999,
+        format_new_statement_line_breaks: 2,
+        format_new_clause_line_breaks: 1,
+        format_expand_comma_lists: true,
+        format_trailing_commas: false,
+        format_space_after_expanded_comma: false,
+        format_expand_booleane_expressions: true,
+        format_expand_case_statements: true,
+        format_expand_between_conditions: true,
+        format_expand_in_lists: true,
+        format_break_join_on_sections: true,
+        format_uppercase_keywords: true,
+        format_html_coloring: false,
+        format_keyword_standardization: false
     };
 
     var internalMessageHandler = function(request, sender, responseCallback) {
@@ -87,10 +104,50 @@
         return true; // wait callback
     }
 
+    function parseToFormatOptions(options) {
+        var stdOptions = new PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatterOptions();
+        return Object.assign(stdOptions, {
+            IndentString: options.format_indent_string,
+            SpacesPerTab: options.format_spaces_per_tab,
+            MaxLineWidth: options.format_max_line_width,
+            NewStatementLineBreaks: options.format_new_statement_line_breaks,
+            NewClauseLineBreaks: options.format_new_clause_line_breaks,
+            ExpandCommaLists: options.format_expand_comma_lists,
+            TrailingCommas: options.format_trailing_commas,
+            SpaceAfterExpandedComma: options.format_space_after_expanded_comma,
+            ExpandBooleanExpressions: options.format_expand_booleane_expressions,
+            ExpandCaseStatements: options.format_expand_case_statements,
+            ExpandBetweenConditions: options.format_expand_between_conditions,
+            ExpandInLists: options.format_expand_in_lists,
+            BreakJoinOnSections: options.format_break_join_on_sections,
+            UppercaseKeywords: options.format_uppercase_keywords,
+            HTMLColoring: options.format_html_coloring,
+            KeywordStandardization: options.format_keyword_standardization
+        });
+    }
+
+    // callback = function(formatOptions) { ... }
+    function getFormatOptions(callback) {
+        return getOptions(function(options) {
+            var formatOptions = parseToFormatOptions(options);
+            callback(formatOptions);
+        });
+    }
+
+    var sqlFormatter = new PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatter.$ctor1(parseToFormatOptions(cloneDefaultOptions()));
+    var tokenizer = new PoorMansTSqlFormatterLib.Tokenizers.TSqlStandardTokenizer();
+    var parser = new PoorMansTSqlFormatterLib.Parsers.TSqlStandardParser();
+
+    function formatSql(sql) {
+        var tokenizedData = tokenizer.TokenizeSQL(sql);
+        var parsedData = parser.ParseSQL(tokenizedData);
+        return sqlFormatter.FormatSQLTree(parsedData);
+    }
+
     // responseCallback = function(response) { ... }
     function getOptionsResponse(responseCallback) {
         return getOptions(function(options) {
-            successResultHandler(options, responseCallback);
+            return successResultHandler(options, responseCallback);
         });
     }
 
@@ -100,8 +157,10 @@
         if (!request.options) {
             return errorResultHandler("options not found.", responseCallback);
         }
-        chrome.storage.sync.set(request.options, function(options) {
-            successResultHandler(options, responseCallback);
+        chrome.storage.sync.set(request.options, function() {
+            var formatOptions = parseToFormatOptions(request.options);
+            sqlFormatter = new PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatter.$ctor1(formatOptions);
+            return successResultHandler(request.options, responseCallback);
         });
         return true; // wait callback
     }
@@ -112,7 +171,7 @@
         if (!request.sql) {
             return errorResultHandler("sql not found.", responseCallback);
         }
-        var formattedSql = PoorMansTSqlFormatterLib.SqlFormattingManager.DefaultFormat(request.sql);
+        var formattedSql = formatSql(request.sql);
         return successResultHandler(formattedSql, responseCallback);
     }
 })();

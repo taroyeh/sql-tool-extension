@@ -30,6 +30,8 @@
             var name = $this.prop("name");
             if ($this.prop("type").toLowerCase() == "checkbox") {
                 options[name] = $this.is(":checked");
+            } else if ($this.prop("type").toLowerCase() == "number") {
+                options[name] = parseInt($this.val());
             } else {
                 options[name] = $this.val();
             }

@@ -55,7 +55,7 @@ body {
     height: 12px;
     margin: 0 3px;
 }
-.color-item > .label {
+.color-item > label {
     display: inline-block;
     width: 400px;
 }

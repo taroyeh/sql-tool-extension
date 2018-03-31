@@ -23,37 +23,37 @@
 
         <div id="tabGeneral">
           <div class="tab-item general-item">
-            <input type="checkbox" id="chkF5Execute" name="f5_execute" class="options-field" />
+            <input type="checkbox" id="chkF5Execute" class="options-field" name="f5_execute" />
             <label for="chkF5Execute" title="You can use this feature to prevent triggering page refresh when hit F5 button">
               Enable hot key: F5 to execute SQL command
             </label>
           </div>
           <div class="tab-item general-item">
-            <input type="checkbox" id="chkSqlFormatter" name="sql_formatter" class="options-field" />
+            <input type="checkbox" id="chkSqlFormatter" class="options-field" name="sql_formatter" />
             <label for="chkSqlFormatter" title="You can configure details in [Formatter]">
               SQL formatter (Hot key: Ctrl + Shift + F)
             </label>
           </div>
           <div class="tab-item general-item">
-            <input type="checkbox" id="chkAutoLoadNextPage" name="auto_load_next_page" class="options-field" disabled="disabled" />
+            <input type="checkbox" id="chkAutoLoadNextPage" class="options-field" name="auto_load_next_page" disabled="disabled" />
             <label for="chkAutoLoadNextPage" title="Load next page when you scrolling to near bottom">
               Auto load next page
             </label>
           </div>
           <div class="tab-item general-item">
-            <input type="checkbox" id="chkColorfulSql" name="colorful_sql" class="options-field" />
+            <input type="checkbox" id="chkColorfulSql" class="options-field" name="colorful_sql" />
             <label for="chkColorfulSql" title="Automatically coloring the SQL code in the editor">
               Colorful SQL editor
             </label>
           </div>
           <div class="tab-item general-item">
-            <input type="checkbox" id="chkShowRowNumber" name="show_row_number" class="options-field" />
+            <input type="checkbox" id="chkShowRowNumber" class="options-field" name="show_row_number" />
             <label for="chkShowRowNumber" title="Add row number at the first column">
               Show row number
             </label>
           </div>
           <div class="tab-item general-item">
-            <input type="checkbox" id="chkShowCellTitle" name="show_cell_title" class="options-field" />
+            <input type="checkbox" id="chkShowCellTitle" class="options-field" name="show_cell_title" />
             <label for="chkShowCellTitle" title="The title is shown as tooltip when the cursor stay above a cell">
               Show cell title
             </label>
@@ -62,7 +62,7 @@
             <label for="selEditorFontSize" title="SQL editor font size">
               SQL editor font size
             </label>
-            <select id="selEditorFontSize" name="editor_font_size" class="options-field">
+            <select id="selEditorFontSize" class="options-field" name="editor_font_size">
               <option value="10">10</option>
               <option value="11">11</option>
               <option value="12">12</option>
@@ -82,135 +82,105 @@
 
         <div id="tabColors">
           <div class="tab-item color-item">
-            #<input type="text" class="text options-field" name="color_sql_editor_background" spellcheck="false" />
+            #<input type="text" id="txtSqlEditorBackground" class="text options-field" name="color_sql_editor_background" spellcheck="false" />
             <div class="display"></div>
-            <div class="label">SQL editor background</div>
+            <label for="txtSqlEditorBackground">SQL editor background</label>
           </div>
           <div class="tab-item color-item">
-            #<input type="text" class="text options-field" name="color_sql_editor_border" spellcheck="false" />
+            #<input type="text" id="txtSqlEditorBorder" class="text options-field" name="color_sql_editor_border" spellcheck="false" />
             <div class="display"></div>
-            <div class="label">SQL editor border</div>
+            <label for="txtSqlEditorBorder">SQL editor border</label>
           </div>
           <div class="tab-item color-item">
-            #<input type="text" class="text options-field" name="color_sql_editor_line_number" spellcheck="false" />
+            #<input type="text" id="txtSqlEditorLineNumber" class="text options-field" name="color_sql_editor_line_number" spellcheck="false" />
             <div class="display"></div>
-            <div class="label">SQL editor line number</div>
+            <label for="txtSqlEditorLineNumber">SQL editor line number</label>
           </div>
           <div class="tab-item color-item">
-            #<input type="text" class="text options-field" name="color_sql_editor_line_number_background" spellcheck="false" />
+            #<input type="text" id="txtSqlEditorLineNumberBackground" class="text options-field" name="color_sql_editor_line_number_background" spellcheck="false" />
             <div class="display"></div>
-            <div class="label">SQL editor line number background</div>
+            <label for="txtSqlEditorLineNumberBackground">SQL editor line number background</label>
           </div>
           <div class="tab-item color-item">
-            #<input type="text" class="text options-field" name="color_result_alternative_row_background" spellcheck="false" />
+            #<input type="text" id="txtResultAlternativeRowBackground" class="text options-field" name="color_result_alternative_row_background" spellcheck="false" />
             <div class="display"></div>
-            <div class="label">Result alternative row background</div>
+            <label for="txtResultAlternativeRowBackground">Result alternative row background</label>
           </div>
           <div class="tab-item color-item">
-            #<input type="text" class="text options-field" name="color_result_mouse_over_row_background" spellcheck="false" />
+            #<input type="text" id="txtResultMouseOverRowBackground" class="text options-field" name="color_result_mouse_over_row_background" spellcheck="false" />
             <div class="display"></div>
-            <div class="label">Result mouse over row background</div>
+            <label for="txtResultMouseOverRowBackground">Result mouse over row background</label>
           </div>
           <div class="tab-item color-item">
-            #<input type="text" class="text options-field" name="color_result_selected_row_background" spellcheck="false" />
+            #<input type="text" id="txtResultSelectedRowBackground" class="text options-field" name="color_result_selected_row_background" spellcheck="false" />
             <div class="display"></div>
-            <div class="label">Result selected row background</div>
+            <label for="txtResultSelectedRowBackground">Result selected row background</label>
           </div>
         </div>
 
         <div id="tabFormat">
           <div class="tab-column">
             <div class="tab-item format-item">
-              <label for="txtIndentString">
-                Indent String
-              </label>
+              <label for="txtIndentString">Indent String</label>
               <input type="text" id="txtIndentString" class="options-field" name="format_indent_string" spellcheck="false" />
             </div>
             <div class="tab-item format-item">
-              <label for="txtSpacesPerTab">
-                Spaces per Tab
-              </label>
+              <label for="txtSpacesPerTab">Spaces per Tab</label>
               <input type="number" id="txtSpacesPerTab" class="options-field" name="format_spaces_per_tab" spellcheck="false" min="0" max="8" />
             </div>
             <div class="tab-item format-item">
-              <label for="txtMaxLineWidth">
-                Max Width (chars)
-              </label>
+              <label for="txtMaxLineWidth">Max Width (chars)</label>
               <input type="number" id="txtMaxLineWidth" class="options-field" name="format_max_line_width" spellcheck="false" min="50" />
             </div>
             <div class="tab-item format-item">
-              <label for="txtNewStatementLineBreaks">
-                Statement Breaks
-              </label>
+              <label for="txtNewStatementLineBreaks">Statement Breaks</label>
               <input type="number" id="txtNewStatementLineBreaks" class="options-field" name="format_new_statement_line_breaks" spellcheck="false" min="1" max="5" />
             </div>
             <div class="tab-item format-item">
-              <label for="txtNewClauseLineBreaks">
-                Clause Breaks
-              </label>
+              <label for="txtNewClauseLineBreaks">Clause Breaks</label>
               <input type="number" id="txtNewClauseLineBreaks" class="options-field" name="format_new_clause_line_breaks" spellcheck="false" min="1" max="5" />
             </div>
           </div>
           <div class="tab-column">
             <div class="tab-item format-item">
-              <input type="checkbox" id="chkExpandCommaLists" name="format_expand_comma_lists" class="options-field" />
-              <label for="chkExpandCommaLists">
-                Expand Comma Lists
-              </label>
+              <input type="checkbox" id="chkExpandCommaLists" class="options-field" name="format_expand_comma_lists" />
+              <label for="chkExpandCommaLists">Expand Comma Lists</label>
             </div>
             <div class="tab-item format-item indent-1">
-              <input type="checkbox" id="chkTrailingCommas" name="format_trailing_commas" class="options-field" />
-              <label for="chkTrailingCommas">
-                Trailing Commas
-              </label>
+              <input type="checkbox" id="chkTrailingCommas" class="options-field" name="format_trailing_commas" />
+              <label for="chkTrailingCommas">Trailing Commas</label>
             </div>
             <div class="tab-item format-item indent-1">
-              <input type="checkbox" id="chkSpaceAfterExpandedComma" name="format_space_after_expanded_comma" class="options-field" />
-              <label for="chkSpaceAfterExpandedComma">
-                Space After Comma
-              </label>
+              <input type="checkbox" id="chkSpaceAfterExpandedComma" class="options-field" name="format_space_after_expanded_comma" />
+              <label for="chkSpaceAfterExpandedComma">Space After Comma</label>
             </div>
             <div class="tab-item format-item">
-              <input type="checkbox" id="chkExpandBooleanExpressions" name="format_expand_booleane_expressions" class="options-field" />
-              <label for="chkExpandBooleanExpressions">
-                Expand Boolean Expressions
-              </label>
+              <input type="checkbox" id="chkExpandBooleanExpressions" class="options-field" name="format_expand_booleane_expressions" />
+              <label for="chkExpandBooleanExpressions">Expand Boolean Expressions</label>
             </div>
             <div class="tab-item format-item">
-              <input type="checkbox" id="chkExpandCaseStatements" name="format_expand_case_statements" class="options-field" />
-              <label for="chkExpandCaseStatements">
-                Expand CASE Expressions
-              </label>
+              <input type="checkbox" id="chkExpandCaseStatements" class="options-field" name="format_expand_case_statements" />
+              <label for="chkExpandCaseStatements">Expand CASE Expressions</label>
             </div>
             <div class="tab-item format-item">
-              <input type="checkbox" id="chkExpandBetweenConditions" name="format_expand_between_conditions" class="options-field" />
-              <label for="chkExpandBetweenConditions">
-                Expand BETWEEN Conditions
-              </label>
+              <input type="checkbox" id="chkExpandBetweenConditions" class="options-field" name="format_expand_between_conditions" />
+              <label for="chkExpandBetweenConditions">Expand BETWEEN Conditions</label>
             </div>
             <div class="tab-item format-item">
-              <input type="checkbox" id="chkExpandInLists" name="format_expand_in_lists" class="options-field" />
-              <label for="chkExpandInLists">
-                Expand IN Lists
-              </label>
+              <input type="checkbox" id="chkExpandInLists" class="options-field" name="format_expand_in_lists" />
+              <label for="chkExpandInLists">Expand IN Lists</label>
             </div>
             <div class="tab-item format-item">
-              <input type="checkbox" id="chkBreakJoinOnSections" name="format_break_join_on_sections" class="options-field" />
-              <label for="chkBreakJoinOnSections">
-                Break Join ON Sections
-              </label>
+              <input type="checkbox" id="chkBreakJoinOnSections" class="options-field" name="format_break_join_on_sections" />
+              <label for="chkBreakJoinOnSections">Break Join ON Sections</label>
             </div>
             <div class="tab-item format-item">
-              <input type="checkbox" id="chkUppercaseKeywords" name="format_uppercase_keywords" class="options-field" />
-              <label for="chkUppercaseKeywords">
-                Uppercase Keywords
-              </label>
+              <input type="checkbox" id="chkUppercaseKeywords" class="options-field" name="format_uppercase_keywords" />
+              <label for="chkUppercaseKeywords">Uppercase Keywords</label>
             </div>
             <div class="tab-item format-item">
-              <input type="checkbox" id="chkKeywordStandardization" name="format_keyword_standardization" class="options-field" />
-              <label for="chkKeywordStandardization">
-                Enable Keyword Standardization
-              </label>
+              <input type="checkbox" id="chkKeywordStandardization" class="options-field" name="format_keyword_standardization" />
+              <label for="chkKeywordStandardization">Enable Keyword Standardization</label>
             </div>
           </div>
         </div>

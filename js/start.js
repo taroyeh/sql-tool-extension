@@ -1,6 +1,8 @@
 (function() {
     // Inject styles
     var styles = [
+    	"libs/codemirror/lib/codemirror.css",
+    	"libs/codemirror/addon/hint/show-hint.css",
         "css/extension.css"
     ];
     for (var i = 0; i < styles.length; i++) {
@@ -11,8 +13,10 @@
     var loaded = [];
     var scripts = [
         "libs/jquery/jquery-1.12.4.min.js",
-        "libs/codemirror/codemirror.js",
-        "libs/codemirror/mirrorframe.js",
+        "libs/codemirror/lib/codemirror.js",
+        "libs/codemirror/mode/sql/sql.js",
+    	"libs/codemirror/addon/hint/show-hint.js",
+    	"libs/codemirror/addon/hint/sql-hint.js",
         "js/extension.js"
     ];
     for (var i = 0; i < scripts.length; i++) {

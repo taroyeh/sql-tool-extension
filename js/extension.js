@@ -11,18 +11,28 @@ function installExtension(extensionId, options) {
         });
 
         var extensionBaseUrl = "chrome-extension://" + extensionId + "/";
-        sqlEditor = CodeMirror.fromTextArea("sql", {
-            path: extensionBaseUrl + "libs/codemirror/",
-            parserfile: "parsesql.js",
-            stylesheet: extensionBaseUrl + "libs/codemirror/sqlcolors.css",
-            indentUnit: 4,
+        sqlEditor = CodeMirror.fromTextArea($("#sql")[0], {
+            mode: "x-mssql",
+            indentWithTabs: true,
+            smartIndent: true,
             lineNumbers: true,
+            matchBrackets : true,
+            autofocus: true,
+            extraKeys: {
+            	"Ctrl-Space": "autocomplete"
+            },
+            hintOptions: {
+            	tables: {
+                    users: ["name", "score", "birthDate"],
+                    countries: ["name", "population", "size"]
+            	}
+            },
             onLoad: function(editor) {
                 var fontSizeStyle = options.editor_font_size + "pt";
                 editor.editor.container.style.fontSize = fontSizeStyle;
                 editor.wrapping.style.fontSize = fontSizeStyle;
             }
-        });
+          });
     } else {
         $("#sql").css({
             fontSize: options.editor_font_size + "pt"

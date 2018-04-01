@@ -1,8 +1,8 @@
 (function() {
     // Inject styles
     var styles = [
-    	"libs/codemirror/lib/codemirror.css",
-    	"libs/codemirror/addon/hint/show-hint.css",
+        "libs/codemirror/lib/codemirror.css",
+        "libs/codemirror/addon/hint/show-hint.css",
         "css/extension.css"
     ];
     for (var i = 0; i < styles.length; i++) {
@@ -15,26 +15,18 @@
         "libs/jquery/jquery-1.12.4.min.js",
         "libs/codemirror/lib/codemirror.js",
         "libs/codemirror/mode/sql/sql.js",
-    	"libs/codemirror/addon/hint/show-hint.js",
-    	"libs/codemirror/addon/hint/sql-hint.js",
+        "libs/codemirror/addon/hint/show-hint.js",
+        "libs/codemirror/addon/hint/sql-hint.js",
         "js/extension.js"
     ];
-    for (var i = 0; i < scripts.length; i++) {
-        loadScript(scripts[i]);
-    }
-
-    // Wait all scripts registered, then fetch options and install extension
-    var timer = setInterval(function() {
-        if (loaded.length == scripts.length) {
-            clearInterval(timer);
-            chrome.runtime.sendMessage({method: "getOptions"}, function(resp) {
-                if (!resp.success) {
-                    return;
-                }
-                install(resp.data);
-            });
-        }
-    }, 20);
+    loadScriptOneByOne(scripts, function() { // finishedHandler
+        chrome.runtime.sendMessage({method: "getOptions"}, function(resp) {
+            if (!resp.success) {
+                return;
+            }
+            install(resp.data);
+        });
+    });
 
     function loadScript(path) {
         var e = document.createElement("script");
@@ -52,6 +44,20 @@
         e.href = chrome.extension.getURL(path);
         e.rel = "stylesheet";
         e.type = "text/css";
+    }
+
+    function loadScriptOneByOne(scripts, finishedHandler) {
+        var index = -1;
+        var timer = setInterval(function() {
+            if (loaded.length == scripts.length) {
+                clearInterval(timer);
+                finishedHandler();
+                return;
+            }
+            if (loaded.length > index && loaded.length < scripts.length) {
+                loadScript(scripts[++index]);
+            }
+        }, 20);
     }
 
     function install(options) {

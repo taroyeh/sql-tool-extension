@@ -19,13 +19,13 @@ function installExtension(extensionId, options) {
             matchBrackets : true,
             autofocus: true,
             extraKeys: {
-            	"Ctrl-Space": "autocomplete"
+                "Ctrl-Space": "autocomplete"
             },
             hintOptions: {
-            	tables: {
+                tables: {
                     users: ["name", "score", "birthDate"],
                     countries: ["name", "population", "size"]
-            	}
+                }
             },
             onLoad: function(editor) {
                 var fontSizeStyle = options.editor_font_size + "pt";

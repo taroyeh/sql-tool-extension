@@ -28,6 +28,6 @@
         "chrome_style": false
     },
     "externally_connectable": {
-        "matches": ["http://10.1.54.91:8090/*"]
+        "ids": ["*"]
     }
 }

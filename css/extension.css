@@ -1,38 +1,6 @@
-form[name=sqlForm] > div {
-    margin: auto;
+.CodeMirror {
+    text-align: initial;
+    border-width: 1px;
+    border-style: solid;
     width: 97%;
-}
-
-table.tableStyle2 tr.data-row:nth-child(odd) td {
-    /*background-color: #DAEEF3;*/
-}
-
-table.tableStyle2 tr.data-row:hover td {
-    /*background-color: #A2DEE8;*/
-}
-
-table.tableStyle2 tr.data-row.checked td {
-    /*background-color: #CFCFCF;*/
-}
-
-.CodeMirror-wrapping {
-    height: 150px;
-    border: 1px solid;
-    /*border-color: #C4C9FD*/
-    resize: both;
-    overflow: auto;
-    /*background-color: #E5F1F4;*/
-}
-
-.CodeMirror-wrapping > iframe {
-    margin-left: -17px;
-    margin-right: -16px;
-}
-
-.CodeMirror-line-numbers {
-    padding: .4em;
-    /*background-color: #5BAFC7;*/
-    /*color: #FFFFFF;*/
-    font-family: monospace;
-    text-align: right;
 }

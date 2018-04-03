@@ -1,21 +1,15 @@
 function installExtension(extensionId, options) {
     var itemsPerPage = 50;
     var $frame = $("#frame");
+    var $sql = $("#sql");
 
     var sqlEditor = null;
     if (options.colorful_sql == true) {
-
-        $("#sql").css({
-            width: "initial",
-            height: "initial"
-        });
-
-        var extensionBaseUrl = "chrome-extension://" + extensionId + "/";
-        sqlEditor = CodeMirror.fromTextArea($("#sql")[0], {
-            mode: "x-mssql",
+        sqlEditor = CodeMirror.fromTextArea($sql[0], {
+            mode: "text/x-mssql",
+            lineNumbers: true,
             indentWithTabs: true,
             smartIndent: true,
-            lineNumbers: true,
             matchBrackets : true,
             autofocus: true,
             extraKeys: {
@@ -26,15 +20,11 @@ function installExtension(extensionId, options) {
                     users: ["name", "score", "birthDate"],
                     countries: ["name", "population", "size"]
                 }
-            },
-            onLoad: function(editor) {
-                var fontSizeStyle = options.editor_font_size + "pt";
-                editor.editor.container.style.fontSize = fontSizeStyle;
-                editor.wrapping.style.fontSize = fontSizeStyle;
             }
-          });
+        });
+        cmResize(sqlEditor);
     } else {
-        $("#sql").css({
+        $sql.css({
             fontSize: options.editor_font_size + "pt"
         });
     }
@@ -92,19 +82,19 @@ function installExtension(extensionId, options) {
     (function applyColorStyle() {
         var colorStyleMapping = {
             color_sql_editor_background: {
-                selector: ".CodeMirror-wrapping",
+                selector: ".CodeMirror",
                 property: "background-color"
             },
             color_sql_editor_border: {
-                selector: ".CodeMirror-wrapping",
+                selector: ".CodeMirror",
                 property: "border-color"
             },
             color_sql_editor_line_number: {
-                selector: ".CodeMirror-line-numbers",
+                selector: ".CodeMirror-linenumber",
                 property: "color"
             },
             color_sql_editor_line_number_background: {
-                selector: ".CodeMirror-line-numbers",
+                selector: ".CodeMirror-gutters",
                 property: "background-color"
             },
             color_result_alternative_row_background: {
@@ -158,7 +148,7 @@ function installExtension(extensionId, options) {
 
     // Override the outer function
     this.search = function(type) {
-        var sqlStr = (sqlEditor == null ? $("#sql").val() : sqlEditor.getCode());
+        var sqlStr = (sqlEditor == null ? $sql.val() : sqlEditor.doc.getValue());
         if($.trim(sqlStr) == ""){
             alert("Please enter the SQL script!");
             return;
@@ -254,38 +244,28 @@ function installExtension(extensionId, options) {
 
     // F5: execute SQL command
     if (options.f5_execute == true) {
-        var f5Handler = function(e) {
+        $(document).bind("keydown", function(e) {
             if ((e.which || e.keyCode) == 116) {
                 e.preventDefault();
                 search("readOnly");
             }
-        };
-        $(document).bind("keydown", f5Handler);
-        if (sqlEditor != null) {
-            $(sqlEditor.frame.contentWindow.document).bind("keydown", f5Handler);
-        }
+        });
     }
 
     // Ctrl + Shift + F: format SQL
     if (options.sql_formatter == true) {
-        var formatSqlHandler = function() {
-            var sqlStr = (sqlEditor == null ? $("#sql").val() : sqlEditor.getCode());
+        var formatSqlHandler = function(e) {
+            var sqlStr = (sqlEditor == null ? $sql.val() : sqlEditor.doc.getValue());
             chrome.runtime.sendMessage(extensionId, {method: "formatSql", sql: sqlStr}, function(resp) {
                 if (!resp.success) {
                     return;
                 }
                 if (sqlEditor == null) {
-                    $("#sql").val(resp.data);
+                    $sql.val(resp.data);
                 } else {
-                    sqlEditor.setCode(resp.data);
+                    sqlEditor.doc.setValue(resp.data);
                 }
             });
-        };
-        var keyPressHandler = function(e) {
-            if (e.ctrlKey && e.shiftKey && ((e.which || e.keyCode) == 6)) {
-                e.preventDefault();
-                formatSqlHandler();
-            }
         };
         var $button = $("<input type='button' id='btnFormat' value=' Format SQL ' title='Ctrl + Shift + F' />").click(formatSqlHandler);
         $("input[type=button]").each(function() {
@@ -294,10 +274,12 @@ function installExtension(extensionId, options) {
                 $this.before($button.attr("style", $this.attr("style"))).before(" ");
             }
         });
-        $(document).bind("keypress", keyPressHandler);
-        if (sqlEditor != null) {
-            $(sqlEditor.frame.contentWindow.document).bind("keypress", keyPressHandler);
-        }
+        $(document).bind("keypress", function(e) {
+            if (e.ctrlKey && e.shiftKey && ((e.which || e.keyCode) == 6)) {
+                e.preventDefault();
+                formatSqlHandler();
+            }
+        });
     }
 
     // Load more data (next page) when scrolling near bottom of page

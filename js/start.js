@@ -17,6 +17,7 @@
         "libs/codemirror/mode/sql/sql.js",
         "libs/codemirror/addon/hint/show-hint.js",
         "libs/codemirror/addon/hint/sql-hint.js",
+        "libs/cm-resize/cm-resize.js",
         "js/extension.js"
     ];
     loadScriptOneByOne(scripts, function() { // finishedHandler

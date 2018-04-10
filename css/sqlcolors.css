@@ -1,0 +1,67 @@
+/* Custom */
+
+.cm-s-default span.cm-comment {
+    color: green;
+}
+
+.cm-s-default span.cm-keyword {
+    color: blue;
+}
+
+.cm-s-default span.cm-string {
+    color: red;
+}
+
+.cm-s-default span.cm-operator {
+    color: gray;
+}
+
+.cm-s-default span.cm-bracket {
+    color: gray;
+}
+
+.cm-s-default span.cm-punctuation {
+    color: gray;
+}
+
+.cm-s-default span.cm-atom {
+    color: gray;    
+}
+
+.cm-s-default span.cm-builtin {
+    color: fuchsia;
+}
+
+.cm-s-default span.cm-number {
+    color: darkcyan;
+}
+
+/* Unknown */
+
+.cm-s-default span.cm-var {
+    color: red;
+}
+
+.cm-s-default span.cm-literal {
+    color: green;
+}
+
+.cm-s-default span.cm-word {
+    color: black;
+}
+
+.cm-s-default span.cm-quoted-word {
+    color: #680;
+}
+
+.cm-s-default span.cm-function {
+    color: darkorange;
+}
+
+.cm-s-default span.cm-type {
+    color: purple;
+}
+
+.cm-s-default span.cm-separator {
+    color: #666666;
+}

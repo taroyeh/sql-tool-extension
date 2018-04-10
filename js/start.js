@@ -3,6 +3,7 @@
     var styles = [
         "libs/codemirror/lib/codemirror.css",
         "libs/codemirror/addon/hint/show-hint.css",
+        "css/sqlcolors.css",
         "css/extension.css"
     ];
     for (var i = 0; i < styles.length; i++) {

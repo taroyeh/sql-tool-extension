@@ -9658,7 +9658,7 @@ CodeMirror.fromTextArea = fromTextArea
 
 addLegacyProps(CodeMirror)
 
-CodeMirror.version = "5.36.0"
+CodeMirror.version = "5.36.1"
 
 return CodeMirror;
 

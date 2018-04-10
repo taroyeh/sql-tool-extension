@@ -3,10 +3,58 @@ function installExtension(extensionId, options) {
     var $frame = $("#frame");
     var $sql = $("#sql");
 
+    (function applyStyle() {
+        var colorStyleMapping = {
+            color_sql_editor_background: {
+                selector: ".CodeMirror",
+                property: "background-color"
+            },
+            color_sql_editor_border: {
+                selector: ".CodeMirror",
+                property: "border-color"
+            },
+            color_sql_editor_line_number: {
+                selector: ".CodeMirror-linenumber",
+                property: "color"
+            },
+            color_sql_editor_line_number_background: {
+                selector: ".CodeMirror-gutters",
+                property: "background-color"
+            },
+            color_result_alternative_row_background: {
+                selector: "table.tableStyle2 tr.data-row:nth-child(odd) td",
+                property: "background-color"
+            },
+            color_result_mouse_over_row_background: {
+                selector: "table.tableStyle2 tr.data-row:hover td",
+                property: "background-color"
+            },
+            color_result_selected_row_background: {
+                selector: "table.tableStyle2 tr.data-row.checked td",
+                property: "background-color"
+            }
+        };
+
+        var cssContent = "";
+        for (var opt in colorStyleMapping) {
+            if (!colorStyleMapping.hasOwnProperty(opt)) {
+                continue;
+            }
+            var setting = colorStyleMapping[opt];
+            cssContent += setting.selector + " { " + setting.property + " : #" + options[opt] + "; } \n";
+        }
+
+        cssContent += ".CodeMirror { font-size: " + options.editor_font_size + "pt; } \n";
+
+        var styleSheet = document.createElement("style");
+        styleSheet.appendChild(document.createTextNode(cssContent)); 
+        (document.head || document.documentElement).appendChild(styleSheet);
+    })();
+
     var sqlEditor = null;
     if (options.colorful_sql == true) {
         sqlEditor = CodeMirror.fromTextArea($sql[0], {
-            mode: "text/x-mssql",
+            mode: "text/x-mysql",
             lineNumbers: true,
             indentWithTabs: true,
             smartIndent: true,
@@ -77,51 +125,6 @@ function installExtension(extensionId, options) {
                 $("#resultInfo").html("");
             }
         };
-    })();
-
-    (function applyColorStyle() {
-        var colorStyleMapping = {
-            color_sql_editor_background: {
-                selector: ".CodeMirror",
-                property: "background-color"
-            },
-            color_sql_editor_border: {
-                selector: ".CodeMirror",
-                property: "border-color"
-            },
-            color_sql_editor_line_number: {
-                selector: ".CodeMirror-linenumber",
-                property: "color"
-            },
-            color_sql_editor_line_number_background: {
-                selector: ".CodeMirror-gutters",
-                property: "background-color"
-            },
-            color_result_alternative_row_background: {
-                selector: "table.tableStyle2 tr.data-row:nth-child(odd) td",
-                property: "background-color"
-            },
-            color_result_mouse_over_row_background: {
-                selector: "table.tableStyle2 tr.data-row:hover td",
-                property: "background-color"
-            },
-            color_result_selected_row_background: {
-                selector: "table.tableStyle2 tr.data-row.checked td",
-                property: "background-color"
-            }
-        };
-
-        var cssContent = "";
-        for (var opt in colorStyleMapping) {
-            if (!colorStyleMapping.hasOwnProperty(opt)) {
-                continue;
-            }
-            var setting = colorStyleMapping[opt];
-            cssContent += setting.selector + " { " + setting.property + " : #" + options[opt] + "; } \n";
-        }
-        var styleSheet = document.createElement("style");
-        styleSheet.appendChild(document.createTextNode(cssContent)); 
-        (document.head || document.documentElement).appendChild(styleSheet);
     })();
 
     function ajaxExcuteSql(data, callback) {

@@ -12,6 +12,35 @@
         e.preventDefault();
     });
 
+    $("#btnLoadDefault").click(function(e) {
+        e.preventDefault();
+        chrome.runtime.sendMessage({method: "getDefaultOptions"}, function(resp) {
+            if (!resp.success) {
+                return;
+            }
+            var defaultOptions = resp.data;
+            var sectionOptions = {};
+
+            $("#tabs div.ui-tabs-panel[aria-hidden='false'] .options-field").each(function() {
+                var $field = $(this);
+                var fieldName = $field.prop("name");
+                sectionOptions[fieldName] = defaultOptions[fieldName];
+            });
+            setOptionsFieldsValue(sectionOptions);
+
+            for (var i = 0; i < colorpickers.length; i++) {
+                var $colorpicker = colorpickers[i];
+                $colorpicker.colorpicker("setColor", $colorpicker.val());
+            }
+
+            var $divMessage = $("#divMessage");
+            $divMessage.text("The new options doesn't apply until you click the Save button.");
+            setTimeout(function() {
+                $divMessage.text("");
+            }, 2000);
+        });
+    });
+
     $("#btnReset").click(function(e) {
         e.preventDefault();
         $("#fmOptions")[0].reset();
@@ -43,10 +72,10 @@
             }
             var $divMessage = $("#divMessage");
             $divMessage.text("Options saved.");
-            setOptionsFields(options);
+            setOptionsFieldsAsDefault(options);
             setTimeout(function() {
                 $divMessage.text("");
-            }, 1000);
+            }, 2000);
         });
     });
 
@@ -54,11 +83,11 @@
         if (!resp.success) {
             return;
         }
-        setOptionsFields(resp.data);
+        setOptionsFieldsAsDefault(resp.data);
         setColorPicker();
     });
 
-    function setOptionsFields(options) {
+    function setOptionsFieldsAsDefault(options) {
         $(".options-field").each(function() {
             var $this = $(this);
             var name = $this.prop("name");
@@ -95,6 +124,25 @@
             }
 
             $this.attr("value", options[name]);
+        });
+    }
+
+    function setOptionsFieldsValue(options) {
+        $(".options-field").each(function() {
+            var $this = $(this);
+            var name = $this.prop("name");
+
+            if (!options.hasOwnProperty(name)) {
+                return;
+            }
+            var value = options[name];
+
+            if ($this.prop("type").toLowerCase() == "checkbox") {
+                $this.prop("checked", value);
+                return;
+            }
+
+            $this.val(options[name]);
         });
     }
 

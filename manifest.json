@@ -3,7 +3,7 @@
     "name": "SQL Tool Extension",
     "description": "Enhance SQL Tool",
     "version": "0.6.3",
-    "web_accessible_resources": ["libs/*", "images/*", "css/*", "js/*", "js/start.js"],
+    "web_accessible_resources": ["libs/*", "images/*", "css/*", "js/extension.js"],
     "permissions": ["storage"],
     "icons": {
         "16": "images/icon16.png",

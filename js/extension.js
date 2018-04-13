@@ -149,20 +149,22 @@ function installExtension(extensionId, options) {
         });
     }
 
+    function fetchDataFromDom(role = "readOnly") {
+        return {
+            sqlStr: (sqlEditor == null ? $sql.val() : sqlEditor.doc.getValue()),
+            dataSource: $("#dataSouce").val(),
+            role: role,
+            pageNumber: 1
+        };
+    }
+
     // Override the outer function
     this.search = function(type) {
-        var sqlStr = (sqlEditor == null ? $sql.val() : sqlEditor.doc.getValue());
-        if($.trim(sqlStr) == ""){
+        var data = fetchDataFromDom(type);
+        if($.trim(data.sqlStr) == ""){
             alert("Please enter the SQL script!");
             return;
         }
-
-        var data = {
-            sqlStr: sqlStr,
-            dataSource: $("#dataSouce").val(),
-            role: type,
-            pageNumber: 1
-        };
         $frame.data("data", data);
 
         ui.resetData();
@@ -305,4 +307,55 @@ function installExtension(extensionId, options) {
     $(document).on("click", "table.tableStyle2 tr.data-row td", function() {
         $(this).parent("tr").toggleClass("checked");
     });
+    
+    // Export excel
+
+    var $dlg = $(
+        "<div>" +
+        "    <div>" +
+        "        <input type='radio' name='exportType' value='0' id='rdoExportAllPage' checked='checked' />" +
+        "        <label for='rdoExportAllPage'>Export all pages.</label>" +
+        "    </div>" + 
+        "    <div>" +
+        "        <input type='radio' name='exportType' value='2' id='rdoExportSpecificPage' />" +
+        "        <label for='rdoExportSpecificPage'>Export specific pages.</label>" +
+        "    </div>" + 
+        "    <div style='margin-left: 20px;'>" +
+        "        <label for='txtStartPage'>From page</label> <input name='startPage' style='width: 30px' id='txtStartPage' />" +
+        "        <label for='txtEndPage'>to page</label> <input name='endPage' style='width: 30px' id='txtEndPage' />" +
+        "    </div>" + 
+        "</div>"
+    ).dialog({
+        title: "Export Excel",
+        buttons: {
+            "Export": function() {
+                $dlg.dialog("close");
+
+                var $form = $("<form action='exportXLS.action' method='post'></form>");
+                var data = fetchDataFromDom();
+                for (var name in data) {
+                    if (data.hasOwnProperty(name)) {
+                        $form.append("<input name='" + name + "' value='" + data[name] + "'>");
+                    }
+                }
+                $form.append("<input name='exportType' value='" + $("input[name=exportType]:checked").val() + "'>");
+                $form.append("<input name='startPage' value='" + $("#txtStartPage").val() + "'>");
+                $form.append("<input name='endPage' value='" + $("#txtEndPage").val() + "'>");
+                $form.append("<input name='pageNumber' value='1'>");
+
+                // Avoid Chrome error: Form submission canceled because the form is not connected
+                $dlg.append($form);
+                $form[0].submit();
+                $form.remove();
+            }
+        },
+        autoOpen: false
+    });
+
+    var $btnExport = $("<input type='button' id='btnExportExcel' value='Export Excel' />");
+    $btnExport.click(function() {
+        $dlg.dialog("open");
+    });
+    $(".tableStyle tr td:nth-child(2)").empty().append($btnExport);
+
 }

@@ -1,6 +1,7 @@
 (function() {
     // Inject styles
     var styles = [
+        "libs/jquery-ui/jquery-ui.min.css",
         "libs/codemirror/lib/codemirror.css",
         "libs/codemirror/addon/hint/show-hint.css",
         "css/sqlcolors.css",
@@ -14,6 +15,7 @@
     var loaded = [];
     var scripts = [
         "libs/jquery/jquery-1.12.4.min.js",
+        "libs/jquery-ui/jquery-ui.min.js",
         "libs/codemirror/lib/codemirror.js",
         "libs/codemirror/mode/sql/sql.js",
         "libs/codemirror/addon/hint/show-hint.js",

@@ -1,6 +1,13 @@
+.generated-button {
+    font-weight: bold;
+    color: #3D69C0;
+}
 .CodeMirror {
     text-align: initial;
     border-width: 1px;
     border-style: solid;
     width: 97%;
+}
+#btnExportExcel {
+    display: none;
 }

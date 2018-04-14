@@ -54,7 +54,7 @@ function installExtension(extensionId, options) {
     var sqlEditor = null;
     if (options.colorful_sql == true) {
         sqlEditor = CodeMirror.fromTextArea($sql[0], {
-            mode: "text/x-mysql",
+            mode: "text/x-mssql",
             lineNumbers: true,
             indentWithTabs: true,
             smartIndent: true,
@@ -105,6 +105,9 @@ function installExtension(extensionId, options) {
             },
             canLoadMore: function() {
                 return !(data.done || data.loading || data.rowCount == 0 || data.pageNumber == 0);
+            },
+            canExportExcel: function() {
+                return data.rowCount > 0;
             },
             startLoading: function() {
                 data.loading = true;
@@ -181,6 +184,12 @@ function installExtension(extensionId, options) {
                 alert("WARNING:\n\n" +
                         "There are some columns with the same name: [" + sameTitle + "].\n\n" +
                         "You should know that there are some bugs occurred when selecting same column names.");
+            }
+            console.log("ui.canExportExcel() ==> " + ui.canExportExcel());
+            if (ui.canExportExcel()) {
+                $("#btnExportExcel").show();
+            } else {
+                $("#btnExportExcel").hide();
             }
         });
 
@@ -270,11 +279,11 @@ function installExtension(extensionId, options) {
                 }
             });
         };
-        var $button = $("<input type='button' id='btnFormat' value=' Format SQL ' title='Ctrl + Shift + F' />").click(formatSqlHandler);
+        var $button = $("<input type='button' id='btnFormat' value=' Format SQL ' title='Ctrl + Shift + F' class='generated-button' />").click(formatSqlHandler);
         $("input[type=button]").each(function() {
             var $this = $(this);
             if ($.trim($this.val()) == "query") {
-                $this.before($button.attr("style", $this.attr("style"))).before(" ");
+                $this.before($button).before(" ");
             }
         });
         $(document).bind("keypress", function(e) {
@@ -305,4 +314,61 @@ function installExtension(extensionId, options) {
     $(document).on("click", "table.tableStyle2 tr.data-row td", function() {
         $(this).parent("tr").toggleClass("checked");
     });
+
+    // Export excel
+
+    var $dlg = $(
+        "<div>" +
+        "    <div>" +
+        "        <input type='radio' name='exportType' value='0' id='rdoExportAllPage' checked='checked' />" +
+        "        <label for='rdoExportAllPage'>Export all pages.</label>" +
+        "    </div>" + 
+        "    <div>" +
+        "        <input type='radio' name='exportType' value='2' id='rdoExportSpecificPage' />" +
+        "        <label for='rdoExportSpecificPage'>Export specific pages.</label>" +
+        "    </div>" + 
+        "    <div style='margin-left: 20px;'>" +
+        "        <label for='txtStartPage'>From page</label> <input name='startPage' style='width: 30px' id='txtStartPage' />" +
+        "        <label for='txtEndPage'>to page</label> <input name='endPage' style='width: 30px' id='txtEndPage' />" +
+        "    </div>" +
+        "    <div style='margin-top: 10px; color: gray;'>" +
+        "        Note:<br \>" +
+        "        The feture can only export the last result in the page.<br \>" +
+        "        That is to say that the result may be affected by another client (people)." +
+        "    </div>" +
+        "</div>"
+    ).dialog({
+        title: "Export Excel",
+        autoOpen: false,
+        minWidth: 350,
+        buttons: {
+            "Export": function() {
+                $dlg.dialog("close");
+
+                var $form = $("<form action='exportXLS.action' method='post'></form>");
+                var data = $frame.data("data");
+                for (var name in data) {
+                    if (data.hasOwnProperty(name)) {
+                        $form.append("<input name='" + name + "' value='" + data[name] + "'>");
+                    }
+                }
+
+                $form.append("<input name='exportType' value='" + $("input[name=exportType]:checked").val() + "'>");
+                $form.append("<input name='startPage' value='" + $("#txtStartPage").val() + "'>");
+                $form.append("<input name='endPage' value='" + $("#txtEndPage").val() + "'>");
+                $form.append("<input name='pageNumber' value='1'>");
+
+                // Avoid Chrome error: Form submission canceled because the form is not connected
+                $dlg.append($form);
+                $form[0].submit();
+                $form.remove();
+            }
+        }
+    });
+
+    var $btnExportExcel = $("<input type='button' id='btnExportExcel' value='Export Excel' class='generated-button' />");
+    $btnExportExcel.click(function() {
+        $dlg.dialog("open");
+    });
+    $(".tableStyle tr td:nth-child(2)").empty().append($btnExportExcel);
 }

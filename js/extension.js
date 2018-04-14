@@ -272,11 +272,11 @@ function installExtension(extensionId, options) {
                 }
             });
         };
-        var $button = $("<input type='button' id='btnFormat' value=' Format SQL ' title='Ctrl + Shift + F' />").click(formatSqlHandler);
+        var $button = $("<input type='button' id='btnFormat' value=' Format SQL ' title='Ctrl + Shift + F' class='generated-button' />").click(formatSqlHandler);
         $("input[type=button]").each(function() {
             var $this = $(this);
             if ($.trim($this.val()) == "query") {
-                $this.before($button.attr("style", $this.attr("style"))).before(" ");
+                $this.before($button).before(" ");
             }
         });
         $(document).bind("keypress", function(e) {
@@ -307,7 +307,7 @@ function installExtension(extensionId, options) {
     $(document).on("click", "table.tableStyle2 tr.data-row td", function() {
         $(this).parent("tr").toggleClass("checked");
     });
-    
+
     // Export excel
 
     var $dlg = $(
@@ -323,6 +323,10 @@ function installExtension(extensionId, options) {
         "    <div style='margin-left: 20px;'>" +
         "        <label for='txtStartPage'>From page</label> <input name='startPage' style='width: 30px' id='txtStartPage' />" +
         "        <label for='txtEndPage'>to page</label> <input name='endPage' style='width: 30px' id='txtEndPage' />" +
+        "    </div>" +
+        "    <div class='export-hint'>" +
+        "        Hint:<br \>" +
+        "        You can use this feature to export excel directly without having to execute SQL commands beforehand." +
         "    </div>" + 
         "</div>"
     ).dialog({
@@ -352,10 +356,9 @@ function installExtension(extensionId, options) {
         autoOpen: false
     });
 
-    var $btnExport = $("<input type='button' id='btnExportExcel' value='Export Excel' />");
+    var $btnExport = $("<input type='button' id='btnExportExcel' value='Export Excel' class='generated-button' />");
     $btnExport.click(function() {
         $dlg.dialog("open");
     });
     $(".tableStyle tr td:nth-child(2)").empty().append($btnExport);
-
 }

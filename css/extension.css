@@ -8,7 +8,6 @@
     border-style: solid;
     width: 97%;
 }
-.export-hint {
-    margin-top: 10px;
-    color: gray;
+#btnExportExcel {
+	display: none;
 }

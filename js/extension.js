@@ -106,6 +106,9 @@ function installExtension(extensionId, options) {
             canLoadMore: function() {
                 return !(data.done || data.loading || data.rowCount == 0 || data.pageNumber == 0);
             },
+            canExportExcel: function() {
+                return data.rowCount > 0;
+            },
             startLoading: function() {
                 data.loading = true;
                 timeStart();
@@ -149,22 +152,20 @@ function installExtension(extensionId, options) {
         });
     }
 
-    function fetchDataFromDom(role = "readOnly") {
-        return {
-            sqlStr: (sqlEditor == null ? $sql.val() : sqlEditor.doc.getValue()),
-            dataSource: $("#dataSouce").val(),
-            role: role,
-            pageNumber: 1
-        };
-    }
-
     // Override the outer function
     this.search = function(type) {
-        var data = fetchDataFromDom(type);
-        if($.trim(data.sqlStr) == ""){
+        var sqlStr = (sqlEditor == null ? $sql.val() : sqlEditor.doc.getValue());
+        if($.trim(sqlStr) == ""){
             alert("Please enter the SQL script!");
             return;
         }
+
+        var data = {
+            sqlStr: sqlStr,
+            dataSource: $("#dataSouce").val(),
+            role: type,
+            pageNumber: 1
+        };
         $frame.data("data", data);
 
         ui.resetData();
@@ -183,6 +184,12 @@ function installExtension(extensionId, options) {
                 alert("WARNING:\n\n" +
                         "There are some columns with the same name: [" + sameTitle + "].\n\n" +
                         "You should know that there are some bugs occurred when selecting same column names.");
+            }
+            console.log("ui.canExportExcel() ==> " + ui.canExportExcel());
+            if (ui.canExportExcel()) {
+                $("#btnExportExcel").show();
+            } else {
+                $("#btnExportExcel").hide();
             }
         });
 
@@ -324,10 +331,6 @@ function installExtension(extensionId, options) {
         "        <label for='txtStartPage'>From page</label> <input name='startPage' style='width: 30px' id='txtStartPage' />" +
         "        <label for='txtEndPage'>to page</label> <input name='endPage' style='width: 30px' id='txtEndPage' />" +
         "    </div>" +
-        "    <div class='export-hint'>" +
-        "        Hint:<br \>" +
-        "        You can use this feature to export excel directly without having to execute SQL commands beforehand." +
-        "    </div>" + 
         "</div>"
     ).dialog({
         title: "Export Excel",
@@ -336,12 +339,13 @@ function installExtension(extensionId, options) {
                 $dlg.dialog("close");
 
                 var $form = $("<form action='exportXLS.action' method='post'></form>");
-                var data = fetchDataFromDom();
+                var data = $frame.data("data");
                 for (var name in data) {
                     if (data.hasOwnProperty(name)) {
                         $form.append("<input name='" + name + "' value='" + data[name] + "'>");
                     }
                 }
+
                 $form.append("<input name='exportType' value='" + $("input[name=exportType]:checked").val() + "'>");
                 $form.append("<input name='startPage' value='" + $("#txtStartPage").val() + "'>");
                 $form.append("<input name='endPage' value='" + $("#txtEndPage").val() + "'>");
@@ -356,9 +360,9 @@ function installExtension(extensionId, options) {
         autoOpen: false
     });
 
-    var $btnExport = $("<input type='button' id='btnExportExcel' value='Export Excel' class='generated-button' />");
-    $btnExport.click(function() {
+    var $btnExportExcel = $("<input type='button' id='btnExportExcel' value='Export Excel' class='generated-button' />");
+    $btnExportExcel.click(function() {
         $dlg.dialog("open");
     });
-    $(".tableStyle tr td:nth-child(2)").empty().append($btnExport);
+    $(".tableStyle tr td:nth-child(2)").empty().append($btnExportExcel);
 }

@@ -54,7 +54,7 @@ function installExtension(extensionId, options) {
     var sqlEditor = null;
     if (options.colorful_sql == true) {
         sqlEditor = CodeMirror.fromTextArea($sql[0], {
-            mode: "text/x-mysql",
+            mode: "text/x-mssql",
             lineNumbers: true,
             indentWithTabs: true,
             smartIndent: true,

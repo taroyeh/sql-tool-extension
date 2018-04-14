@@ -331,9 +331,16 @@ function installExtension(extensionId, options) {
         "        <label for='txtStartPage'>From page</label> <input name='startPage' style='width: 30px' id='txtStartPage' />" +
         "        <label for='txtEndPage'>to page</label> <input name='endPage' style='width: 30px' id='txtEndPage' />" +
         "    </div>" +
+        "    <div style='margin-top: 10px; color: gray;'>" +
+        "        Note:<br \>" +
+        "        The feture can only export the last result in the page.<br \>" +
+        "        That is to say that the result may be affected by another client (people)." +
+        "    </div>" +
         "</div>"
     ).dialog({
         title: "Export Excel",
+        autoOpen: false,
+        minWidth: 350,
         buttons: {
             "Export": function() {
                 $dlg.dialog("close");
@@ -356,8 +363,7 @@ function installExtension(extensionId, options) {
                 $form[0].submit();
                 $form.remove();
             }
-        },
-        autoOpen: false
+        }
     });
 
     var $btnExportExcel = $("<input type='button' id='btnExportExcel' value='Export Excel' class='generated-button' />");

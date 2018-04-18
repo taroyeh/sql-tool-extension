@@ -185,7 +185,6 @@ function installExtension(extensionId, options) {
                         "There are some columns with the same name: [" + sameTitle + "].\n\n" +
                         "You should know that there are some bugs occurred when selecting same column names.");
             }
-            console.log("ui.canExportExcel() ==> " + ui.canExportExcel());
             if (ui.canExportExcel()) {
                 $("#btnExportExcel").show();
             } else {

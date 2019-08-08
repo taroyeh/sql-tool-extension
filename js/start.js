@@ -1,19 +1,19 @@
 (function() {
     // Inject styles
-    var styles = [
+    const styles = [
         "libs/jquery-ui/jquery-ui.min.css",
         "libs/codemirror/lib/codemirror.css",
         "libs/codemirror/addon/hint/show-hint.css",
         "css/sqlcolors.css",
         "css/extension.css"
     ];
-    for (var i = 0; i < styles.length; i++) {
+    for (let i = 0; i < styles.length; i++) {
         loadStyle(styles[i]);
     }
 
     // Inject scripts
-    var loaded = [];
-    var scripts = [
+    const loaded = [];
+    const scripts = [
         "libs/jquery/jquery-1.12.4.min.js",
         "libs/jquery-ui/jquery-ui.min.js",
         "libs/codemirror/lib/codemirror.js",
@@ -33,7 +33,7 @@
     });
 
     function loadScript(path) {
-        var e = document.createElement("script");
+        const e = document.createElement("script");
         (document.head || document.documentElement).appendChild(e);
         e.src = chrome.extension.getURL(path);
         e.onload = function() {
@@ -43,7 +43,7 @@
     }
 
     function loadStyle(path) {
-        var e = document.createElement("link");
+        const e = document.createElement("link");
         (document.head || document.documentElement).appendChild(e);
         e.href = chrome.extension.getURL(path);
         e.rel = "stylesheet";
@@ -51,8 +51,8 @@
     }
 
     function loadScriptOneByOne(scripts, finishedHandler) {
-        var index = -1;
-        var timer = setInterval(function() {
+        let index = -1;
+        const timer = setInterval(function() {
             if (loaded.length == scripts.length) {
                 clearInterval(timer);
                 finishedHandler();
@@ -65,8 +65,8 @@
     }
 
     function install(options) {
-        var newScript = document.createElement("script");
-        var inlineScript = document.createTextNode(
+        const newScript = document.createElement("script");
+        const inlineScript = document.createTextNode(
             'installExtension("' + chrome.runtime.id + '", ' + JSON.stringify(options) + ');'
         );
         newScript.appendChild(inlineScript); 

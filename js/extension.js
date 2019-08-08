@@ -1,10 +1,10 @@
 function installExtension(extensionId, options) {
-    var itemsPerPage = 50;
-    var $frame = $("#frame");
-    var $sql = $("#sql");
+    const itemsPerPage = 50;
+    const $frame = $("#frame");
+    const $sql = $("#sql");
 
     (function applyStyle() {
-        var colorStyleMapping = {
+        const colorStyleMapping = {
             color_sql_editor_background: {
                 selector: ".CodeMirror",
                 property: "background-color"
@@ -35,23 +35,23 @@ function installExtension(extensionId, options) {
             }
         };
 
-        var cssContent = "";
-        for (var opt in colorStyleMapping) {
+        let cssContent = "";
+        for (let opt in colorStyleMapping) {
             if (!colorStyleMapping.hasOwnProperty(opt)) {
                 continue;
             }
-            var setting = colorStyleMapping[opt];
+            const setting = colorStyleMapping[opt];
             cssContent += setting.selector + " { " + setting.property + " : #" + options[opt] + "; } \n";
         }
 
         cssContent += ".CodeMirror { font-size: " + options.editor_font_size + "pt; } \n";
 
-        var styleSheet = document.createElement("style");
+        const styleSheet = document.createElement("style");
         styleSheet.appendChild(document.createTextNode(cssContent)); 
         (document.head || document.documentElement).appendChild(styleSheet);
     })();
 
-    var sqlEditor = null;
+    let sqlEditor = null;
     if (options.colorful_sql == true) {
         sqlEditor = CodeMirror.fromTextArea($sql[0], {
             mode: "text/x-mssql",
@@ -77,9 +77,9 @@ function installExtension(extensionId, options) {
         });
     }
 
-    var ui = (function() {
-        var intervalControl = null;
-        var data = {
+    const ui = (function() {
+        let intervalControl = null;
+        const data = {
             rowCount: 0,
             pageNumber: 0,
             loading: false,
@@ -139,7 +139,7 @@ function installExtension(extensionId, options) {
             data: data,
             dataType: "html",
             success: function(htmlResponse) {
-                var $response = handleHtmlResponse(htmlResponse);
+                const $response = handleHtmlResponse(htmlResponse);
                 callback($response);
             },
             error: function() {
@@ -154,13 +154,13 @@ function installExtension(extensionId, options) {
 
     // Override the outer function
     this.search = function(type) {
-        var sqlStr = (sqlEditor == null ? $sql.val() : sqlEditor.doc.getValue());
+        const sqlStr = (sqlEditor == null ? $sql.val() : sqlEditor.doc.getValue());
         if($.trim(sqlStr) == ""){
             alert("Please enter the SQL script!");
             return;
         }
 
-        var data = {
+        const data = {
             sqlStr: sqlStr,
             dataSource: $("#dataSouce").val(),
             role: type,
@@ -172,18 +172,18 @@ function installExtension(extensionId, options) {
         ui.clearFrame();
 
         ajaxExcuteSql(data, function($response) {
-            var $table = $response.filter("table");
+            const $table = $response.filter("table");
             if (options.auto_load_next_page == true) {
                 $frame.append($table);
             } else {
                 $frame.append($response);
             }
-            var titles = $table.data("titles");
-            var sameTitle = fetchFirstSameTitle(titles);
+            const titles = $table.data("titles");
+            const sameTitle = fetchFirstSameTitle(titles);
             if (sameTitle != null) {
                 alert("WARNING:\n\n" +
-                        "There are some columns with the same name: [" + sameTitle + "].\n\n" +
-                        "You should know that there are some bugs occurred when selecting same column names.");
+                      "There are some columns with the same name: [" + sameTitle + "].\n\n" +
+                      "You should know that there are some bugs occurred when selecting same column names.");
             }
             if (ui.canExportExcel()) {
                 $("#btnExportExcel").show();
@@ -193,8 +193,8 @@ function installExtension(extensionId, options) {
         });
 
         function fetchFirstSameTitle(titles) {
-            for (var j = 1; j < titles.length; j++) {
-                for (var i = 0; i < j; i++) {
+            for (let j = 1; j < titles.length; j++) {
+                for (let i = 0; i < j; i++) {
                     if (titles[i] == titles[j]) {
                         return titles[i];
                     }
@@ -205,27 +205,27 @@ function installExtension(extensionId, options) {
     }
 
     function loadMore() {
-        var data = $frame.data("data");
+        const data = $frame.data("data");
         data.pageNumber++;
 
         ajaxExcuteSql(data, function($response) {
-            var $table = $response.filter("table");
+            const $table = $response.filter("table");
             $frame.find("table").append($table.find("tr"));
         });
     }
 
     function handleHtmlResponse(htmlResponse) {
-        var $response = $(htmlResponse);
+        const $response = $(htmlResponse);
 
-        var rowCount = parseInt($($response.filter("#rowCount").val()).text());
-        var pageNumber = parseInt($response.filter("#pageNumber").val());
+        const rowCount = parseInt($($response.filter("#rowCount").val()).text());
+        const pageNumber = parseInt($response.filter("#pageNumber").val());
         ui.updateData(rowCount, pageNumber);
 
-        var $table = $response.filter("table");
-        var rowId = 0;
-        var titles = [];
+        const $table = $response.filter("table");
+        let rowId = 0;
+        const titles = [];
         $table.find("tr").each(function() {
-            var $tr = $(this);
+            const $tr = $(this);
             if (rowId == 0) {
                 if (options.show_cell_title == true) {
                     $tr.find("th").each(function() {
@@ -237,7 +237,7 @@ function installExtension(extensionId, options) {
                 }
             } else {
                 if (options.show_cell_title == true) {
-                    var t = 0;
+                    let t = 0;
                     $tr.find("td").each(function() {
                         $(this).prop("title", titles[t++]);
                     });
@@ -265,8 +265,8 @@ function installExtension(extensionId, options) {
 
     // Ctrl + Shift + F: format SQL
     if (options.sql_formatter == true) {
-        var formatSqlHandler = function(e) {
-            var sqlStr = (sqlEditor == null ? $sql.val() : sqlEditor.doc.getValue());
+        const formatSqlHandler = function(e) {
+            const sqlStr = (sqlEditor == null ? $sql.val() : sqlEditor.doc.getValue());
             chrome.runtime.sendMessage(extensionId, {method: "formatSql", sql: sqlStr}, function(resp) {
                 if (!resp.success) {
                     return;
@@ -278,9 +278,9 @@ function installExtension(extensionId, options) {
                 }
             });
         };
-        var $button = $("<input type='button' id='btnFormat' value=' Format SQL ' title='Ctrl + Shift + F' class='generated-button' />").click(formatSqlHandler);
+        const $button = $("<input type='button' id='btnFormat' value=' Format SQL ' title='Ctrl + Shift + F' class='generated-button' />").click(formatSqlHandler);
         $("input[type=button]").each(function() {
-            var $this = $(this);
+            const $this = $(this);
             if ($.trim($this.val()) == "query") {
                 $this.before($button).before(" ");
             }
@@ -316,7 +316,7 @@ function installExtension(extensionId, options) {
 
     // Export excel
 
-    var $dlg = $(
+    const $dlg = $(
         "<div>" +
         "    <div>" +
         "        <input type='radio' name='exportType' value='0' id='rdoExportAllPage' checked='checked' />" +
@@ -344,9 +344,9 @@ function installExtension(extensionId, options) {
             "Export": function() {
                 $dlg.dialog("close");
 
-                var $form = $("<form action='exportXLS.action' method='post'></form>");
-                var data = $frame.data("data");
-                for (var name in data) {
+                const $form = $("<form action='exportXLS.action' method='post'></form>");
+                const data = $frame.data("data");
+                for (let name in data) {
                     if (data.hasOwnProperty(name)) {
                         $form.append("<input name='" + name + "' value='" + data[name] + "'>");
                     }
@@ -365,7 +365,7 @@ function installExtension(extensionId, options) {
         }
     });
 
-    var $btnExportExcel = $("<input type='button' id='btnExportExcel' value='Export Excel' class='generated-button' />");
+    const $btnExportExcel = $("<input type='button' id='btnExportExcel' value='Export Excel' class='generated-button' />");
     $btnExportExcel.click(function() {
         $dlg.dialog("open");
     });

@@ -2,7 +2,7 @@
 
 (function() {
     // DO NOT use directly, you should use cloneDefaultOptions() to get a cloned options
-    var defaultOptions = {
+    const defaultOptions = {
         // General
         f5_execute: true,
         sql_formatter: true,
@@ -40,33 +40,33 @@
         format_keyword_standardization: false
     };
 
-    var internalMessageHandler = function(request, sender, responseCallback) {
+    const internalMessageHandler = function(request, sender, responseCallback) {
         if (!request || !request.method) {
             return errorResultHandler("Method not found.", responseCallback);
         }
         switch (request.method) {
-        case "getDefaultOptions":
-            return successResultHandler(cloneDefaultOptions(), responseCallback);
-        case "getOptions":
-            return getOptionsResponse(responseCallback);
-        case "setOptions":
-            return setOptionsResponse(request, responseCallback);
-        case "formatSql":
-            return formatSqlResponse(request, responseCallback);
-        default:
-            return errorResultHandler("Wrong method.", responseCallback);
+            case "getDefaultOptions":
+                return successResultHandler(cloneDefaultOptions(), responseCallback);
+            case "getOptions":
+                return getOptionsResponse(responseCallback);
+            case "setOptions":
+                return setOptionsResponse(request, responseCallback);
+            case "formatSql":
+                return formatSqlResponse(request, responseCallback);
+            default:
+                return errorResultHandler("Wrong method.", responseCallback);
         }
     };
-    var externalMessageHandler = function(request, sender, responseCallback) {
+    const externalMessageHandler = function(request, sender, responseCallback) {
         if (!request || !request.method) {
             return errorResultHandler("Method not found.", responseCallback);
         }
         switch (request.method) {
-        // Add allowed methods in white list below, pass it to internal handler
-        case "formatSql":
-            return internalMessageHandler(request, sender, responseCallback);
-        default:
-            return errorResultHandler("Wrong method.", responseCallback);
+            // Add allowed methods in white list below, pass it to internal handler
+            case "formatSql":
+                return internalMessageHandler(request, sender, responseCallback);
+            default:
+                return errorResultHandler("Wrong method.", responseCallback);
         }
     }
     chrome.runtime.onMessageExternal.addListener(externalMessageHandler);
@@ -74,7 +74,7 @@
 
     // responseCallback = function(response) { ... }
     function successResultHandler(result, responseCallback) {
-        var response = {
+        const response = {
             success: true,
             message: "",
             data: result
@@ -85,7 +85,7 @@
 
     // responseCallback = function(response) { ... }
     function errorResultHandler(message, responseCallback) {
-        var response = {
+        const response = {
             success: false,
             message: message,
             data: null
@@ -105,7 +105,7 @@
     }
 
     function parseToFormatOptions(options) {
-        var stdOptions = new PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatterOptions();
+        const stdOptions = new PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatterOptions();
         return Object.assign(stdOptions, {
             IndentString: options.format_indent_string,
             SpacesPerTab: options.format_spaces_per_tab,
@@ -129,18 +129,18 @@
     // callback = function(formatOptions) { ... }
     function getFormatOptions(callback) {
         return getOptions(function(options) {
-            var formatOptions = parseToFormatOptions(options);
+            const formatOptions = parseToFormatOptions(options);
             callback(formatOptions);
         });
     }
 
-    var sqlFormatter = new PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatter.$ctor1(parseToFormatOptions(cloneDefaultOptions()));
-    var tokenizer = new PoorMansTSqlFormatterLib.Tokenizers.TSqlStandardTokenizer();
-    var parser = new PoorMansTSqlFormatterLib.Parsers.TSqlStandardParser();
+    let sqlFormatter = new PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatter.$ctor1(parseToFormatOptions(cloneDefaultOptions()));
+    const tokenizer = new PoorMansTSqlFormatterLib.Tokenizers.TSqlStandardTokenizer();
+    const parser = new PoorMansTSqlFormatterLib.Parsers.TSqlStandardParser();
 
     function formatSql(sql) {
-        var tokenizedData = tokenizer.TokenizeSQL(sql);
-        var parsedData = parser.ParseSQL(tokenizedData);
+        const tokenizedData = tokenizer.TokenizeSQL(sql);
+        const parsedData = parser.ParseSQL(tokenizedData);
         return sqlFormatter.FormatSQLTree(parsedData);
     }
 
@@ -158,7 +158,7 @@
             return errorResultHandler("options not found.", responseCallback);
         }
         chrome.storage.sync.set(request.options, function() {
-            var formatOptions = parseToFormatOptions(request.options);
+            const formatOptions = parseToFormatOptions(request.options);
             sqlFormatter = new PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatter.$ctor1(formatOptions);
             return successResultHandler(request.options, responseCallback);
         });
@@ -171,7 +171,7 @@
         if (!request.sql) {
             return errorResultHandler("sql not found.", responseCallback);
         }
-        var formattedSql = formatSql(request.sql);
+        const formattedSql = formatSql(request.sql);
         return successResultHandler(formattedSql, responseCallback);
     }
 })();

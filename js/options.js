@@ -1,5 +1,5 @@
 (function() {
-    var colorpickers = [];
+    const colorpickers = [];
 
     $("#tabs").tabs();
 
@@ -18,22 +18,22 @@
             if (!resp.success) {
                 return;
             }
-            var defaultOptions = resp.data;
-            var sectionOptions = {};
+            const defaultOptions = resp.data;
+            const sectionOptions = {};
 
             $("#tabs div.ui-tabs-panel[aria-hidden='false'] .options-field").each(function() {
-                var $field = $(this);
-                var fieldName = $field.prop("name");
+                const $field = $(this);
+                const fieldName = $field.prop("name");
                 sectionOptions[fieldName] = defaultOptions[fieldName];
             });
             setOptionsFieldsValue(sectionOptions);
 
-            for (var i = 0; i < colorpickers.length; i++) {
-                var $colorpicker = colorpickers[i];
+            for (let i = 0; i < colorpickers.length; i++) {
+                const $colorpicker = colorpickers[i];
                 $colorpicker.colorpicker("setColor", $colorpicker.val());
             }
 
-            var $divMessage = $("#divMessage");
+            const $divMessage = $("#divMessage");
             $divMessage.text("The new options doesn't apply until you click the Save button.");
             setTimeout(function() {
                 $divMessage.text("");
@@ -44,8 +44,8 @@
     $("#btnReset").click(function(e) {
         e.preventDefault();
         $("#fmOptions")[0].reset();
-        for (var i = 0; i < colorpickers.length; i++) {
-            var $colorpicker = colorpickers[i];
+        for (let i = 0; i < colorpickers.length; i++) {
+            const $colorpicker = colorpickers[i];
             $colorpicker.colorpicker("setColor", $colorpicker[0].value);
         }
     });
@@ -53,10 +53,10 @@
     $("#btnSave").click(function(e) {
         e.preventDefault();
 
-        var options = {};
+        const options = {};
         $(".options-field").each(function() {
-            var $this = $(this);
-            var name = $this.prop("name");
+            const $this = $(this);
+            const name = $this.prop("name");
             if ($this.prop("type").toLowerCase() == "checkbox") {
                 options[name] = $this.is(":checked");
             } else if ($this.prop("type").toLowerCase() == "number") {
@@ -70,7 +70,7 @@
             if (!resp.success) {
                 return;
             }
-            var $divMessage = $("#divMessage");
+            const $divMessage = $("#divMessage");
             $divMessage.text("Options saved.");
             setOptionsFieldsAsDefault(options);
             setTimeout(function() {
@@ -89,13 +89,13 @@
 
     function setOptionsFieldsAsDefault(options) {
         $(".options-field").each(function() {
-            var $this = $(this);
-            var name = $this.prop("name");
+            const $this = $(this);
+            const name = $this.prop("name");
 
             if (!options.hasOwnProperty(name)) {
                 return;
             }
-            var value = options[name];
+            const value = options[name];
 
             if ($this.prop("type").toLowerCase() == "checkbox") {
                 if (value) {
@@ -108,7 +108,7 @@
 
             if ($this.prop("tagName").toLowerCase() == "select") {
                 $this.find("option").each(function() {
-                    var $option = $(this);
+                    const $option = $(this);
                     if ($option.val() == value) {
                         $option.attr("selected", "selected");
                     } else {
@@ -129,13 +129,13 @@
 
     function setOptionsFieldsValue(options) {
         $(".options-field").each(function() {
-            var $this = $(this);
-            var name = $this.prop("name");
+            const $this = $(this);
+            const name = $this.prop("name");
 
             if (!options.hasOwnProperty(name)) {
                 return;
             }
-            var value = options[name];
+            const value = options[name];
 
             if ($this.prop("type").toLowerCase() == "checkbox") {
                 $this.prop("checked", value);
@@ -148,8 +148,8 @@
 
     function setColorPicker() {
         $(".color-item").each(function() {
-            var $colorItem = $(this);
-            var $colorpicker = $colorItem.find(".text").colorpicker({
+            const $colorItem = $(this);
+            const $colorpicker = $colorItem.find(".text").colorpicker({
                 parts: ["map", "bar"],
                 layout: {
                     // Left, Top, Width, Height (in table cells).

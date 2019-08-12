@@ -10,6 +10,7 @@
 		colorful_sql: true,
 		show_row_number: true,
 		show_cell_title: true,
+		auto_update_url: true,
 		editor_font_size: 16,
 		// Default SQL
 		default_sql: "Keep on working...",

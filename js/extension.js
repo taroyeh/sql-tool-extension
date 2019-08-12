@@ -17,6 +17,8 @@ function installExtension(extensionId, options) {
 		setupExportExcel();
 		setupResultInfo();
 		setupHighlightSelectedRow();
+		setupAutoUpdateUrl();
+		recoverUiFromUrl();
 	})();
 
 	//==============================================
@@ -154,7 +156,7 @@ function installExtension(extensionId, options) {
 	function overrideOriginSearch() {
 		// Override the outer function
 		this.search = function(type) {
-			const sqlStr = (sqlEditor == null ? $sql.val() : sqlEditor.doc.getValue());
+			const sqlStr = getSqlFromUi();
 			if($.trim(sqlStr) == ""){
 				alert("Please enter the SQL script!");
 				return;
@@ -167,6 +169,8 @@ function installExtension(extensionId, options) {
 				pageNumber: 1
 			};
 			$frame.data("data", data);
+
+			updateUrl(data.dataSource, data.sqlStr);
 
 			ui.resetData();
 			ui.clearFrame();
@@ -210,16 +214,12 @@ function installExtension(extensionId, options) {
 		// Ctrl + Shift + F: format SQL
 		if (options.sql_formatter == true) {
 			const formatSqlHandler = function(e) {
-				const sqlStr = (sqlEditor == null ? $sql.val() : sqlEditor.doc.getValue());
+				const sqlStr = getSqlFromUi();
 				chrome.runtime.sendMessage(extensionId, {method: "formatSql", sql: sqlStr}, function(resp) {
 					if (!resp.success) {
 						return;
 					}
-					if (sqlEditor == null) {
-						$sql.val(resp.data);
-					} else {
-						sqlEditor.doc.setValue(resp.data);
-					}
+					setSqlToUi(resp.data);
 				});
 			};
 			const $button = $("<input type='button' id='btnFormat' value=' Format SQL ' title='Ctrl + Shift + F' class='generated-button' />").click(formatSqlHandler);
@@ -325,7 +325,31 @@ function installExtension(extensionId, options) {
 		});
 	}
 
+	function setupAutoUpdateUrl() {
+		if (!options.auto_update_url) {
+			return;
+		}
+		window.onpopstate = function(e) {
+			if (e.state) {
+				$('#dataSouce').val(e.state.dataSource);
+				setSqlToUi(e.state.sql);
+			}
+		};
+	}
+
 	//==============================================
+
+	function getSqlFromUi() {
+		return sqlEditor == null ? $sql.val() : sqlEditor.doc.getValue();
+	}
+
+	function setSqlToUi(sql) {
+		if (sqlEditor == null) {
+			$sql.val(sql);
+		} else {
+			sqlEditor.doc.setValue(sql);
+		}
+	}
 
 	function ajaxExcuteSql(data, callback) {
 		ui.startLoading();
@@ -409,4 +433,42 @@ function installExtension(extensionId, options) {
 		return $response;
 	}
 
+	function getUrlParameter(key) {
+		const url = window.location.search.substring(1);
+		const params = url.split('&');
+		for (let i = 0; i < params.length; i++) {
+			const vars = params[i].split('=');
+			if (vars[0] == key) {
+				return vars[1];
+			}
+		}
+		return null;
+	}
+
+	function updateUrl(dataSource, sql) {
+		if (!options.auto_update_url) {
+			return;
+		}
+		const compressedSql = LZString.compressToEncodedURIComponent(sql);
+		const params = `?d=${dataSource}&s=${compressedSql}`;
+		window.history.pushState({
+			dataSource: dataSource,
+			sql: sql
+		}, "execute-history", params);
+	}
+
+	function recoverUiFromUrl() {
+		const dataSource = getUrlParameter('d');
+		const compressedSql = getUrlParameter('s');
+
+		if (dataSource) {
+			$('#dataSouce').val(dataSource);
+		}
+		if (compressedSql) {
+			const decompressSql = LZString.decompressFromEncodedURIComponent(compressedSql);
+			if (decompressSql) {
+				setSqlToUi(decompressSql);
+			}
+		}
+	}
 }

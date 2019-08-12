@@ -12,7 +12,7 @@
     },
     "content_scripts": [
         {
-            "matches": ["*://*/*/querySqlTool/goToIndex.action"],
+            "matches": ["*://*/*/querySqlTool/goToIndex.action*"],
             "js": ["js/start.js"]
         }
     ],

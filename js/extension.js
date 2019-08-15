@@ -97,7 +97,10 @@ function installExtension(extensionId, options) {
 		$originRow.remove();
 
 		$('#btnQuery').click(function() {
-			search("readOnly");
+			if (search("readOnly")) {
+				const data = $frame.data("data");
+				updateUrl(data.dataSource, data.sqlStr);
+			}
 		});
 	}
 
@@ -182,7 +185,7 @@ function installExtension(extensionId, options) {
 			const sqlStr = getSqlFromUi();
 			if($.trim(sqlStr) == ""){
 				alert("Please enter the SQL script!");
-				return;
+				return false;
 			}
 
 			const data = {
@@ -192,8 +195,6 @@ function installExtension(extensionId, options) {
 				pageNumber: 1
 			};
 			$frame.data("data", data);
-
-			updateUrl(data.dataSource, data.sqlStr);
 
 			ui.resetData();
 			ui.clearFrame();
@@ -214,6 +215,7 @@ function installExtension(extensionId, options) {
 				}
 				ui.checkExportExcelButtonVisibility();
 			});
+			return true;
 		}
 	}
 

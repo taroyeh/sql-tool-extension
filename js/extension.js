@@ -1,13 +1,14 @@
 function installExtension(extensionId, options) {
 	const itemsPerPage = 50;
-	const $frame = $("#frame");
-	const $sql = $("#sql");
+	const $frame = $('#frame');
+	const $sql = $('#sql');
 
 	let sqlEditor = null;
 
 	//==============================================
 
 	(function main() {
+		rerenderControllerRow();
 		applyStyle();
 		colorfulSql();
 		overrideOriginSearch();
@@ -15,7 +16,6 @@ function installExtension(extensionId, options) {
 		setupFormatSql();
 		setupAutoLoadNextPage();
 		setupExportExcel();
-		setupResultInfo();
 		setupHighlightSelectedRow();
 		setupAutoUpdateUrl();
 		recoverUiFromUrl();
@@ -37,6 +37,7 @@ function installExtension(extensionId, options) {
 				data.pageNumber = 0;
 				data.loading = false;
 				data.done = false;
+				this.checkExportExcelButtonVisibility();
 			},
 			updateData: function(rowCount, pageNumber) {
 				data.rowCount = rowCount;
@@ -44,10 +45,10 @@ function installExtension(extensionId, options) {
 				if (pageNumber * itemsPerPage >= rowCount) {
 					data.done = true;
 				}
-				$("#resultInfo").html(
-					"<span><b>Count: </b> " + rowCount + " </span> " + 
-					"<span><b>Page loaded: </b> " + pageNumber + " / " + Math.ceil(rowCount / itemsPerPage) + " </span>"
-				);
+				$('#resultInfo').html(`
+					<span><b>Count: </b> ${rowCount} </span>
+					<span><b>Page loaded: </b> ${pageNumber} / ${Math.ceil(rowCount / itemsPerPage)} </span>
+				`);
 			},
 			canLoadMore: function() {
 				return !(data.done || data.loading || data.rowCount == 0 || data.pageNumber == 0);
@@ -60,23 +61,45 @@ function installExtension(extensionId, options) {
 				timeStart();
 				clearInterval(intervalControl);
 				intervalControl = window.setInterval("showScreen();", 120000);
-				$frame.append("<center class='loadingPlaceholder'><img src='" + $page.imagePath + "/loading-1.gif'/></center>");
+				$frame.append(`<center class="loadingPlaceholder"><img src="${$page.imagePath}/loading-1.gif"/></center>`);
 			},
 			endLoading: function() {
-				$(".loadingPlaceholder").remove();
+				$('.loadingPlaceholder').remove();
 				clearInterval(intervalControl);
 				hideScreen();
 				timeEnd();
 				data.loading = false;
 			},
 			clearFrame: function() {
-				$frame.html("");
-				$("#resultInfo").html("");
+				$frame.empty();
+				$("#resultInfo").empty();
+			},
+			checkExportExcelButtonVisibility: function() {
+				if (this.canExportExcel()) {
+					$("#btnExportExcel").show();
+				} else {
+					$("#btnExportExcel").hide();
+				}
 			}
 		};
 	})();
 
 	//==============================================
+
+	function rerenderControllerRow() {
+		const $originRow = $('.tableStyle tbody tr:first');
+		const $tr = $('<tr></tr>');
+		$tr.append($('<td><b>Server:</b> </td>').append($originRow.find('#dataSouce')));
+		$tr.append($('<td></td>').append($originRow.find('#excuteTime')));
+		$tr.append($('<td><div id="resultInfo"></div></td>'));
+		$tr.append($('<td id="buttonContainer"><input type="button" id="btnQuery" class="generated-button" value="Query"></td>'));
+		$('.tableStyle tbody').append($tr);
+		$originRow.remove();
+
+		$('#btnQuery').click(function() {
+			search("readOnly");
+		});
+	}
 
 	function applyStyle() {
 		const colorStyleMapping = {
@@ -116,7 +139,7 @@ function installExtension(extensionId, options) {
 				continue;
 			}
 			const setting = colorStyleMapping[opt];
-			cssContent += setting.selector + " { " + setting.property + " : #" + options[opt] + "; } \n";
+			cssContent += `${setting.selector} { ${setting.property} : #${options[opt]}; } \n`;
 		}
 
 		cssContent += ".CodeMirror { font-size: " + options.editor_font_size + "pt; } \n";
@@ -189,11 +212,7 @@ function installExtension(extensionId, options) {
 						  "There are some columns with the same name: [" + sameTitle + "].\n\n" +
 						  "You should know that there are some bugs occurred when selecting same column names.");
 				}
-				if (ui.canExportExcel()) {
-					$("#btnExportExcel").show();
-				} else {
-					$("#btnExportExcel").hide();
-				}
+				ui.checkExportExcelButtonVisibility();
 			});
 		}
 	}
@@ -201,10 +220,11 @@ function installExtension(extensionId, options) {
 	function setupF5Exexute() {
 		// F5: execute SQL command
 		if (options.f5_execute == true) {
+			$('#btnQuery').attr('title', 'F5');
 			$(document).bind("keydown", function(e) {
 				if ((e.which || e.keyCode) == 116) {
 					e.preventDefault();
-					search("readOnly");
+					$('#btnQuery').click();
 				}
 			});
 		}
@@ -222,13 +242,8 @@ function installExtension(extensionId, options) {
 					setSqlToUi(resp.data);
 				});
 			};
-			const $button = $("<input type='button' id='btnFormat' value=' Format SQL ' title='Ctrl + Shift + F' class='generated-button' />").click(formatSqlHandler);
-			$("input[type=button]").each(function() {
-				const $this = $(this);
-				if ($.trim($this.val()) == "query") {
-					$this.before($button).before(" ");
-				}
-			});
+			const $button = $("<input type='button' id='btnFormat' value='Format SQL' title='Ctrl + Shift + F' class='generated-button' />").click(formatSqlHandler);
+			$('#btnQuery').before($button);
 			$(document).bind("keypress", function(e) {
 				if (e.ctrlKey && e.shiftKey && ((e.which || e.keyCode) == 6)) {
 					e.preventDefault();
@@ -310,12 +325,7 @@ function installExtension(extensionId, options) {
 		$btnExportExcel.click(function() {
 			$dlg.dialog("open");
 		});
-		$(".tableStyle tr td:nth-child(2)").empty().append($btnExportExcel);
-	}
-
-	function setupResultInfo() {
-		// Result info
-		$("#excuteTime").after("<div id='resultInfo' style='display: inline-block; padding-left: 10px;'></div>");
+		$('#buttonContainer').prepend($btnExportExcel);
 	}
 
 	function setupHighlightSelectedRow() {

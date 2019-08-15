@@ -1,13 +1,21 @@
 .generated-button {
-    font-weight: bold;
-    color: #3D69C0;
+	font-weight: bold;
+	color: #3D69C0;
+	padding: 0 2px;
+	margin: 0 2px;
 }
 .CodeMirror {
-    text-align: initial;
-    border-width: 1px;
-    border-style: solid;
-    width: 97%;
+	text-align: initial;
+	border-width: 1px;
+	border-style: solid;
+	width: 97%;
+}
+#buttonContainer {
+	text-align: right;
+}
+#resultInfo {
+	display: inline-block;
 }
 #btnExportExcel {
-    display: none;
+	display: none;
 }
